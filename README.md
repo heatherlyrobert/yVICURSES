@@ -1,2 +1,2 @@
 # yVICURSES
-vi-keys curses-specific handling
+vikeys curses specific
