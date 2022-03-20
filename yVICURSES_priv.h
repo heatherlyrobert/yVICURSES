@@ -15,7 +15,7 @@
 #define     P_PURPOSE   "remove curses-specific dependency from vikeys libraries"
 
 #define     P_NAMESAKE  "kharis-daimona (grace)"
-#define     P_HERITAGE  "with of hephaestus and youngest of the graces"
+#define     P_HERITAGE  "wife of hephaestus and youngest of the graces"
 #define     P_IMAGERY   ""
 #define     P_REASON    "curses is a simple, beautiful, and graceful solution"
 
@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0a"
-#define     P_VERTXT    "initial library setup"
+#define     P_VERNUM    "2.0k"
+#define     P_VERTXT    "quick fix to only show float if main part NOT shown"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -55,40 +55,133 @@
 #include    <yLOG.h>              /* heatherly program logging                */
 #include    <ySTR.h>              /* heatherly string processing              */
 /*---(custom vikeys)---------------------*/
-#include    <yKEYS.h>             /* heatherly vikeys key handling            */
-#include    <yMODE.h>             /* heatherly vikeys mode tracking           */
-#include    <yMACRO.h>            /* heatherly vikeys macro processing        */
-#include    <ySRC.h>              /* heatherly vikeys source editing          */
-#include    <yCMD.h>              /* heatherly vikeys command processing      */
-#include    <yVIEW.h>             /* heatherly vikeys view management         */
+#include    <yKEYS.h>             /* heatherly vikeys key handling           */
+#include    <yMODE.h>             /* heatherly vikeys mode tracking          */
+#include    <yMACRO.h>            /* heatherly vikeys macro processing       */
+#include    <ySRC.h>              /* heatherly vikeys source editing         */
+#include    <yCMD.h>              /* heatherly vikeys command processing     */
+#include    <yVIEW.h>             /* heatherly vikeys view management        */
+#include    <yFILE.h>             /* heatherly vikeys content file handling  */
+#include    <yMARK.h>             /* heatherly vikeys search and marking      */
+#include    <yMAP.h>              /* heatherly vikeys location management    */
 /*---(custom other)----------------------*/
-#include    <yCOLOR.h>            /* heatherly opengl color handling          */
 #include    <yDLST_solo.h>        /* heatherly double-double-list             */
 /*---(posix standard)--------------------*/
 #include    <ncurses.h>           /* CURSES mvprintw, refresh, getch, ...     */
 
 
+#define     MAX_PRIMARY    20
+typedef  struct cBASIC  tBASIC;
+struct cBASIC {
+   char        abbr;
+   char        terse       [LEN_SHORT];
+   char        desc        [LEN_LABEL];
+   short       value;
+};
+extern tBASIC  g_primary [MAX_PRIMARY];
+
+
+#define     MAX_COLOR   100
+typedef  struct cCOLOR  tCOLOR;
+struct cCOLOR {
+   char        terse       [LEN_LABEL];     /* short description              */
+   char        desc        [LEN_DESC ];     /* description/reason             */
+   char        fg;                          /* foreground color               */
+   char        bg;                          /* background color               */
+   int         value;                       /* curses attribute value         */
+};
+extern tCOLOR  g_colors [MAX_COLOR];
+extern int     g_ncolor;
+
 
 
 typedef    struct    cMY    tMY;
 struct cMY {
+   int         wide;              /* maximum x-coordinate                    */
+   int         tall;              /* maximum y-coordinate                    */
+   int         x_cur;
+   int         y_cur;
+   char        p_formula;         /* formula configuration                   */
 };
 extern tMY         myVICURSES;
+
+
+
+extern char g_print       [LEN_RECD];
 
 
 
 /*===[[ yVICURSES_base.c ]]===================================================*/
 /*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
 /*---(program)--------------*/
-char        yview_init              (void);
-char        yvicurses_getch         (char *a_ch);
+char        yVICURSES_init          (char *a_title, char *a_version, char a_mode);
+char        yvicurses_color_purge   (void);
+char        yVICURSES_wrap          (void);
 char        yVICURSES_main          (char *a_delay, char *a_update, void *a_altinput);
 /*---(unittest)-------------*/
-char        yview__unit_quiet       (void);
-char        yview__unit_loud        (void);
+char        yvicurses__unit_quiet   (void);
+char        yvicurses__unit_loud    (void);
+char        yvicurses__unit_end     (void);
+/*---(done)-----------------*/
+char*       yVICURSES__unit         (char *a_question, char a_index);
+
+
+
+/*===[[ yVICURSES_base.c ]]===================================================*/
+/*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+/*---(resize)---------------*/
+char        yvicurses_resize        (void);
+/*---(input)----------------*/
+char        yvicurses_getch         (char a_block, char *a_ch);
+/*---(draw)-----------------*/
+char        yvicurses_cleanse       (void);
+char        yvicurses_prep          (char a_abbr);
+char        yvicurses_cursor        (void);
+char        yvicurses_refresh       (void);
 /*---(done)-----------------*/
 
 
+
+/*===[[ yVICURSES_base.c ]]===================================================*/
+/*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+/*---(search)---------------*/
+char        yvicurses__by_abbr      (char a_abbr);
+char        yvicurses__primary      (char a_abbr);
+char        yvicurses__by_name      (char *a_terse);
+/*---(create)---------------*/
+char        yVICURSES_color         (char *a_terse, char *a_desc, char a_fg, char a_bg);
+/*---(using)----------------*/
+char        yVICURSES_by_name       (char *a_terse);
+char*       yvicurses__by_pair      (int a_pair);
+/*---(program)--------------*/
+char        yvicurses_color_init    (void);
+char        yvicurses_color_wrap    (void);
+/*---(done)-----------------*/
+
+
+
+/*===[[ yVICURSES_draw.c ]]===================================================*/
+/*345678901-12345678901-12345678901-12345678901-12345678901-12345678901-123456*/
+/*---(text)-----------------*/
+char        yvicurses_title         (void);
+char        yvicurses_version       (void);
+char        yvicurses_modes         (void);
+char        yvicurses_status        (void);
+char        yvicurses_command       (void);
+char        yvicurses_keys          (void);
+/*---(fancy)----------------*/
+char        yvicurses_univs         (void);
+char        yvicurses_menus         (void);
+/*---(source)---------------*/
+char        yvicurses__display      (char a_part, char a_loc, char a_style);
+char        yvicurses_formula       (void);
+char        yvicurses_formula_min   (void);
+char        yvicurses_formula_small (void);
+char        yvicurses_formula_label (void);
+char        yvicurses_formula_max   (void);
+char        yvicurses_command       (void);
+char        yvicurses_float         (void);
+/*---(done)-----------------*/
 
 
 #endif
