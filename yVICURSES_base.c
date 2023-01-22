@@ -33,6 +33,116 @@ yVICURSES_version       (void)
    return yVICURSES_ver;
 }
 
+char
+yVICURSES__wave_one     (char *a_title, char *a_version, char a_mode)
+{
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)-------------------------*/
+   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
+   /*----(first)-------------------------*/
+   rc = yMODE_init           (a_mode);
+   DEBUG_GRAF   yLOG_value   ("yMODE"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(TEMP)---------------------------*/
+   rc = yFILE_init           ();
+   DEBUG_GRAF   yLOG_value   ("yFILE"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yCMD_init            ();
+   DEBUG_GRAF   yLOG_value   ("yCMD"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(early)-----------------------*/
+   rc = yVIEW_init (YVIEW_CURSES, a_title, a_version, yvicurses_cleanse, yvicurses_prep, yvicurses_cursor, yvicurses_refresh);
+   DEBUG_GRAF   yLOG_value   ("yVIEW"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*----(update sizes)------------------*/
+   yvicurses_resize ();
+   /*----(later)-------------------------*/
+   rc = yKEYS_init           ();
+   DEBUG_GRAF   yLOG_value   ("yKEYS"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yMAP_init            ();
+   DEBUG_GRAF   yLOG_value   ("yMAP"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = ySRC_init            ();
+   DEBUG_GRAF   yLOG_value   ("ySRC"    , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yMACRO_init          ();
+   DEBUG_GRAF   yLOG_value   ("yMACRO"  , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   rc = yMARK_init           ();
+   DEBUG_GRAF   yLOG_value   ("yMARK"   , rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   /*---(complete)-----------------------*/
+   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char
+yVICURSES__wave_two     (void)
+{  /*---(note)---------------------------*/
+   /*
+    * this wave handles the inter-library calls after all are initialized
+    * and yVIHUB is fully configured.
+    *
+    */
+   /*---(locals)-----------+-----+-----+-*/
+   char        rce         =  -10;
+   char        rc          =    0;
+   /*---(header)----------------------*/
+   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
+   /*----(first)-------------------------*/
+   rc = yMODE_init_after     ();
+   DEBUG_GRAF   yLOG_value   ("yMODE"   , rc);
+   rc = yFILE_init_after     ();
+   DEBUG_GRAF   yLOG_value   ("yFILE"   , rc);
+   rc = yCMD_init_after      ();
+   DEBUG_GRAF   yLOG_value   ("yCMD"    , rc);
+   rc = yVIEW_init_after     ();
+   DEBUG_GRAF   yLOG_value   ("yVIEW"   , rc);
+   rc = yKEYS_init_after     ();
+   DEBUG_GRAF   yLOG_value   ("yKEYS"   , rc);
+   rc = yMAP_init_after      ();
+   DEBUG_GRAF   yLOG_value   ("yMAP"    , rc);
+   rc = ySRC_init_after      ();
+   DEBUG_GRAF   yLOG_value   ("ySRC"    , rc);
+   rc = yMACRO_init_after    ();
+   DEBUG_GRAF   yLOG_value   ("yMACRO"  , rc);
+   rc = yMARK_init_after     ();
+   DEBUG_GRAF   yLOG_value   ("yMARK"   , rc);
+   /*---(complete)-----------------------*/
+   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
 
 char
 yVICURSES_init          (char *a_title, char *a_version, char a_mode)
@@ -53,28 +163,20 @@ yVICURSES_init          (char *a_title, char *a_version, char a_mode)
    use_default_colors   ();
    use_legacy_coding    (2);       /* also display characters 128 - 156 */
    yvicurses_color_init ();
-   /*----(first)-------------------------*/
-   yMODE_init           (a_mode);
-   /*---(TEMP)------------------------*/
-   yFILE_init           ();
-   yCMD_init            ();
-   /*---(early)-----------------------*/
-   yVIEW_init (YVIEW_CURSES, a_title, a_version, yvicurses_cleanse, yvicurses_prep, yvicurses_cursor, yvicurses_refresh);
-   yvicurses_resize ();
-   /*----(middling)----------------------*/
-   /*> yvikeys_menu_init    ();                                                       <*/
-   /*> yvikeys_srch_init    ();                                                       <*/
-   /*----(later)-------------------------*/
-   yKEYS_init           ();
-   yMAP_init            ();
-   ySRC_init            ();
-   yMACRO_init          ();
-   rc = yMARK_init           ();
-   DEBUG_GRAF   yLOG_value   ("yMARK"   , rc);
+   /*---(library inits)------------------*/
+   rc = yVICURSES__wave_one (a_title, a_version, a_mode);
+   DEBUG_GRAF   yLOG_value   ("wave one", rc);
    --rce;  if (rc < 0) {
       DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
       return rce;
    }
+   rc = yVICURSES__wave_two ();
+   DEBUG_GRAF   yLOG_value   ("wave two", rc);
+   --rce;  if (rc < 0) {
+      DEBUG_GRAF   yLOG_exitr   (__FUNCTION__, rce);
+      return rce;
+   }
+   yMODE_results ();
    /*----(latest)------------------------*/
    /*> yvikeys_mreg_init    ();                                                       <* 
     *> yvikeys_sreg_init    ();                                                       <* 
@@ -91,21 +193,23 @@ yVICURSES_init          (char *a_title, char *a_version, char a_mode)
     *> yvikeys_sizes_init   ();                                                       <* 
     *> yMODE_init_set   (UMOD_SENDKEYS, NULL, SENDKEYS_umode);                        <*/
    /*---(curses drawing)-----------------*/
-   yVIEW_simple (YVIEW_TITLE  , 0, yvicurses_title);
-   yVIEW_simple (YVIEW_VERSION, 0, yvicurses_version);
-   yVIEW_simple (YVIEW_MODES  , 0, yvicurses_modes);
-   yVIEW_simple (YVIEW_STATUS , 0, yvicurses_status);
-   yVIEW_simple (YVIEW_COMMAND, 0, yvicurses_command);
-   yVIEW_simple (YVIEW_FORMULA, 0, yvicurses_formula);
-   yVIEW_simple (YVIEW_FLOAT  , 0, yvicurses_float);
-   yVIEW_simple (YVIEW_KEYS   , 0, yvicurses_keys);
-   yVIEW_simple (YVIEW_BUFFER , 0, yvicurses_univs);
+   yVIEW_simple (YVIEW_TITLE  , 0, 0, yvicurses_title);
+   yVIEW_simple (YVIEW_VERSION, 0, 0, yvicurses_version);
+   yVIEW_simple (YVIEW_MODES  , 0, 0, yvicurses_modes);
+   yVIEW_simple (YVIEW_STATUS , 0, 0, yvicurses_status);
+   yVIEW_simple (YVIEW_COMMAND, 0, 0, yvicurses_command);
+   yVIEW_simple (YVIEW_FORMULA, 0, 0, yvicurses_formula);
+   yVIEW_simple (YVIEW_FLOAT  , 0, 0, yvicurses_float);
+   yVIEW_simple (YVIEW_KEYS   , 0, 0, yvicurses_keys);
+   yVIEW_simple (YVIEW_BUFFER , 0, 0, yvicurses_univs);
+   yVIEW_simple (YVIEW_NOTES  , 0, 0, yvicurses_notes);
    yVIEW_menus  (yvicurses_menus);
    myVICURSES.p_formula = 's';
    yVIEW_switch_add (YVIEW_FORMULA, "min"  , "", yvicurses_formula_min  , "minimal formula display");
    yVIEW_switch_add (YVIEW_FORMULA, "small", "", yvicurses_formula_small, "formula display with length");
    yVIEW_switch_add (YVIEW_FORMULA, "label", "", yvicurses_formula_label, "formula display with label and length");
    yVIEW_switch_add (YVIEW_FORMULA, "max"  , "", yvicurses_formula_max  , "detailed formula display");
+   rc = yCMD_add (YVIHUB_M_FORMAT, "redraw"      , ""    , ""     , yVICURSES_redraw           , "force redraw" );
    /*---(complete)-----------------------*/
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;
@@ -117,8 +221,13 @@ yVICURSES_wrap                 (void)
    /*---(header)----------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    /*---(shutdown ncurses)------------*/
+   yFILE_wrap ();
+   yCMD_wrap  ();
+   yMAP_wrap  ();
+   yMODE_wrap ();
    yvicurses_color_wrap ();
    endwin ();
+   delscreen (stdscr);
    system ("clear");
    fflush (stdout);
    /*---(complete)-----------------------*/
@@ -147,7 +256,7 @@ yvicurses__unit_quiet   (void)
    int         x_narg       = 1;
    char       *x_args [20]  = {"yVICURSES_unit" };
    yMODE_init (MODE_MAP);
-   yMODE_handler_setup ();
+   yMODE_unit_handlers ();
    yVICURSES_init ("yVICURSES itself ;)", P_VERNUM, MODE_MAP);
    return 0;
 }
@@ -159,11 +268,11 @@ yvicurses__unit_loud    (void)
    char       *x_args [20]  = {"yVICURSES_unit" };
    yURG_logger   (x_narg, x_args);
    yURG_urgs     (x_narg, x_args);
-   yURG_name  ("kitchen"      , YURG_ON);
-   yURG_name  ("ystr"         , YURG_ON);
+   yURG_by_name  ("kitchen"      , YURG_ON);
+   yURG_by_name  ("ystr"         , YURG_ON);
    yMODE_init (MODE_MAP);
-   yMODE_handler_setup ();
-   DEBUG_SCRP   yLOG_info     ("yVICURSES"  , yVICURSES_version   ());
+   yMODE_unit_handlers ();
+   DEBUG_PROG   yLOG_info     ("yVICURSES"  , yVICURSES_version   ());
    yVICURSES_init ("yVICURSES itself ;)", P_VERNUM, MODE_MAP);
    return 0;
 }

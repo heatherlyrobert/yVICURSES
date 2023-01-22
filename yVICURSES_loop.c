@@ -73,12 +73,12 @@ yvicurses_getch         (char a_block, char *a_ch)
    x_ch = getch ();
    DEBUG_LOOP   yLOG_sint    (x_ch);
    /*---(special operations)-------------*/
-   if (x_ch == KEY_RESIZE || x_ch == -102) {
-      DEBUG_LOOP   yLOG_snote   ("resize request");
-      yvicurses_resize ();
-      DEBUG_LOOP   yLOG_sexit   (__FUNCTION__);
-      return 1;
-   }
+   /*> if (x_ch == KEY_RESIZE || x_ch == -102) {                                      <* 
+    *>    DEBUG_LOOP   yLOG_snote   ("resize request");                               <* 
+    *>    yvicurses_resize ();                                                        <* 
+    *>    DEBUG_LOOP   yLOG_sexit   (__FUNCTION__);                                   <* 
+    *>    return 1;                                                                   <* 
+    *> }                                                                              <*/
    /*---(save back)----------------------*/
    if (x_ch >= 0 && x_ch <= 255)  x_key = x_ch;
    else                           x_key = 0;
@@ -96,12 +96,14 @@ yvicurses_getch         (char a_block, char *a_ch)
 /*====================------------------------------------====================*/
 static void      o___DRAW____________________o (void) {;}
 
+char yVICURSES_redraw   (void)  { myVICURSES.redraw = 'y'; return 0; }
+
 char
 yvicurses_cleanse       (void)
 {
-   /*> if (myVIKEYS.redraw == 'y')  clear  ();                                        <*/
    yvicurses_resize ();
-   clear ();
+   if (myVICURSES.redraw == 'y') clear  ();
+   myVICURSES.redraw = '-';
    return 0;
 }
 
@@ -122,7 +124,11 @@ char
 yvicurses_refresh       (void)
 {
    /*> mvprintw (0,0,"%3dw,%3dt", myVICURSES.wide, myVICURSES.tall);                                    <*/
-   mvprintw (myVICURSES.y_cur, myVICURSES.x_cur, "");
+   if (yMODE_curr () == SMOD_MENUS) {
+      mvprintw (myVICURSES.y_menu, myVICURSES.x_menu, "");
+   } else {
+      mvprintw (myVICURSES.y_cur , myVICURSES.x_cur , "");
+   }
    refresh ();
    return 0;
 }

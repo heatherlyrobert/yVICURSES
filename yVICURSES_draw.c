@@ -46,14 +46,19 @@ yvicurses__text         (char a_part)
       if (yMACRO_exe_mode () == MACRO_RUN)  yVICURSES_by_name ("!_warn");
       else                                  yVICURSES_by_name ("w_keys");
       break;
-   case YVIEW_VERSION :
-   case YVIEW_KEYS     :
+   case YVIEW_VERSION  :
    case YVIEW_BUFFER   :
       yVICURSES_by_name ("w_keys");
       break;
+   case YVIEW_KEYS     :
+      if (yKEYS_is_locked ())      yVICURSES_by_name ("!_warn");
+      else if (yKEYS_is_error ())  yVICURSES_by_name ("!_warn");
+      else                         yVICURSES_by_name ("w_keys");
+      break;
    case YVIEW_STATUS  :
-      if (yKEYS_is_error ())  yVICURSES_by_name ("!_warn");
-      else                    yVICURSES_by_name ("w_sbar");
+      if (yKEYS_is_locked ())      yVICURSES_by_name ("!_warn");
+      else if (yKEYS_is_error ())  yVICURSES_by_name ("!_warn");
+      else                         yVICURSES_by_name ("w_sbar");
       break;
    default  :
       DEBUG_GRAF   yLOG_note    ("color not found for part");
@@ -460,101 +465,180 @@ yvicurses_float         (void)
 static void  o___MENU____________o () { return; }
 
 char
-yvicurses_menus         (void)
+yvicurses_notes_draw    (short x, short y, uchar w, uchar h, uchar *t)
 {
-   /*---(locals)-----------+-----+-----+-*/
-   char        rc          =    0;
-   short       x_left, x_wide, x_bott, x_tall;
-   int         i           =    0;
-   int         x_len       =    0;
-   int         x_cen       =    0;
-   char        t           [LEN_HUND]  = "";
-   char        s           [LEN_HUND]  = "";
-   short       x, y, xo, yo;
-   char        l, a, v, x_lvl;
-   char        b           [LEN_TERSE] = "";
+   int         x_align     =    0;
+   int         x_full, x_len;
+   int         x_beg, x_next, x_cr;
+   int         x_edge      =    8;
+   int         i, j;
+   char       *p           = NULL;
+   /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   DEBUG_GRAF   yLOG_char    ("mode"      , yMODE_curr ());
-   if (yMODE_not (SMOD_MENUS)) {
-      DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
-      return 0;
+   /*---(clear out)----------------------*/
+   for (i = y; i < y + h; ++i) {
+      mvprintw   (i, x, "%*.*s", w, w, YSTR_EMPTY);
    }
-   /*---(size)---------------------------*/
-   yVIEW_size   (YVIEW_MENUS, NULL, &x_left, &x_wide, &x_bott, &x_tall);
-   DEBUG_GRAF   yLOG_complex  ("size"      , "%3dl, %3dw, %3db, %3dt", x_left, x_wide, x_bott, x_tall);
-   x_cen  = x_left + (x_wide * 0.50);
-   /*---(clear)--------------------------*/
-   yVICURSES_by_name ("m_back");
-   for (i = x_bott - x_tall + 1; i <= x_bott; ++i) {
-      DEBUG_GRAF   yLOG_value   ("i"         , i);
-      mvprintw   (i, x_left, "Å%*.*sÅ", x_wide - 2, x_wide - 2, YSTR_EMPTY);
-   }
-   /*---(overall data)-------------------*/
-   rc = yCMD_menu_overall (&x_lvl, b, s);
-   /*---(borders)------------------------*/
-   strlcpy (t, "ÉÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÇ", LEN_HUND);
-   x_len = strlen (t);
-   mvprintw   (x_bott - x_tall + 1, x_cen - (x_len / 2), t);
-   switch (x_lvl) {
-   case  0 : strlcpy (t, "¥ main menu ¥", LEN_HUND); break;
-   case  1 : sprintf (t, "¥ %s sub-menu ¥", s); break;
-   case  2 : sprintf (t, "¥ %s options ¥" , s); break;
-   }
-   x_len = strlen (t);
-   mvprintw   (x_bott - x_tall + 1, x_cen - (x_len / 2), t);
-   strlcpy (t, "ÑÄÄÄÄ¥ wide, flat, and universal ¥ÄÄÄÄÄÖ", LEN_HUND);
-   x_len = strlen (t);
-   mvprintw   (x_bott             , x_cen - (x_len / 2), t);
-   /*---(menu path)----------------------*/
-   if (x_lvl > 0) {
-      sprintf (t, "µ%s", b);
-      x_len = strlen (t);
-      mvprintw   (x_bott - x_tall + 2, x_left + 2, "%s", t);
-   }
-   /*---(version)------------------------*/
-   sprintf (t, "%s", P_VERNUM);
-   x_len = strlen (t);
-   mvprintw   (x_bott - x_tall + 2, x_left + x_wide - x_len - 2, "%s", t);
-   /*---(center)-------------------------*/
-   if (x_lvl == 0) {
-      yVICURSES_by_name ("m_cent");
-      strlcpy (t,   "ÇÑÄäÄÖÉ"  , LEN_HUND);
-      x_len = strlen (t);
-      mvprintw   (x_bott - x_tall + 5, x_cen - (x_len / 2), t);
-      strlcpy (t, "ÄÇÑÄÇÅÉÄÖÉÄ", LEN_HUND);
-      x_len = strlen (t);
-      mvprintw   (x_bott - x_tall + 6, x_cen - (x_len / 2), t);
-      strlcpy (t, "ÄÄàâÄàäàÄâàÄÄ", LEN_HUND);
-      x_len = strlen (t);
-      mvprintw   (x_bott - x_tall + 7, x_cen - (x_len / 2), t);
-      strlcpy (t, "ÄÄâàÄâäâÄàâÄÄ", LEN_HUND);
-      x_len = strlen (t);
-      mvprintw   (x_bott - x_tall + 8, x_cen - (x_len / 2), t);
-      strlcpy (t, "ÄÖÉÄÖÅÑÄÇÑÄ", LEN_HUND);
-      x_len = strlen (t);
-      mvprintw   (x_bott - x_tall + 9, x_cen - (x_len / 2), t);
-      strlcpy (t,   "ÖÉÄäÄÇÑ"  , LEN_HUND);
-      x_len = strlen (t);
-      mvprintw   (x_bott - x_tall + 10, x_cen - (x_len / 2), t);
-   }
-   /*---(items)--------------------------*/
-   yVICURSES_by_name ("m_back");
-   for (i = 0; i < 400; ++i) {
-      rc = yCMD_menu_data          (i, &x, &y, b, &xo, &yo, &l, t, &a, &v);
-      if (rc < 0)  break;
-      yVICURSES_by_name ("m_bull");
-      mvprintw   (y, x, "%s", b);
-      if      (xo == 0)  xo -= l / 2;
-      else if (xo <  0)  xo -= l - 1;
-      switch (v) {
-      case 'y' : yVICURSES_by_name ("m_menu");   break;
-      default  : yVICURSES_by_name ("m_back");   break;
+   /*---(opengl)-------------------------*/
+   strlcpy (t, t, LEN_RECD);
+   x_edge = 1;
+   x_beg  = x_next  = 0;
+   x_full = strlen (t);
+   for (i = 0; i < h; ++i) {
+      x_len = strlen (t + x_beg);
+      p = strchr (t + x_beg, (uchar) '≠');
+      DEBUG_GRAF   yLOG_complex ("x_beg"     ,  "%di, %3dn, %3dlÂ%sÊ, %p", i, x_beg, x_len, t + x_beg, p);
+      if (p != NULL)  x_cr = (int) p - (int) t;
+      if (w > 3)  x_next = x_beg + w - 3;
+      else        x_next = x_beg + 3;
+      if (p != NULL && x_cr < x_next)  x_next = x_cr;
+      DEBUG_GRAF   yLOG_complex ("x_next"    ,  "%3db, %3dw, %3dn, %3dc", x_beg, w, x_next, x_cr);
+      if (x_next != x_cr) {
+         for (j = x_next; j > x_beg; --j) {
+            DEBUG_GRAF   yLOG_complex ("check"     , "%2d %c", j, t [j]);
+            if (strchr ("- ", t [j]) == NULL)  continue;
+            t [j] = '\0';
+            x_next = j + 1;
+            break;
+         }
+         x_len = strlen (t + x_beg);
+         if (x_len >= w)  t [w - 1] = '\0';
+      } else {
+         t [x_cr] = '\0';
+         x_len = strlen (t + x_beg);
+         ++x_next;
       }
-      mvprintw   (y + yo, x + xo, "%s", t);
+      mvprintw (y + i, x + ((w - x_len) / 2), "%s", t + x_beg);
+      x_beg = x_next;
+      if (x_beg > x_full) break;
    }
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
+char
+yvicurses_notes_line    (char c, short xb, short yb, short xe, short ye)
+{
+   int         i           =    0;
+   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
+   /*> mvprintw (10, 10, "à");                                                        <*/
+   DEBUG_GRAF   yLOG_complex ("args"       , "%c  %4dx %4dy  %4dx %4dy", c, xb, yb, xe, ye);
+   /*---(origin)-------------------------*/
+   mvprintw (yb, xb, "≥");
+   /*---(first leg)----------------------*/
+   switch (c) {
+   case '‘' : case '1' : case '8' :
+      DEBUG_GRAF   yLOG_note    ("up first (1,8)");
+      /*> mvprintw (yb, xb - 1, "ëàê");                                               <*/
+      /*> mvprintw (yb, xb - 1, "ëäê");                                               <*/
+      /*> mvprintw (yb, xb - 1, "ÄäÄ");                                               <*/
+      /*> mvprintw (yb, xb - 1, " õ ");                                               <*/
+      /*> mvprintw (yb, xb - 1, " ≥ ");                                               <*/
+      for (i = yb - 1; i > ye; --i)  mvprintw (i , xb, "Å");
+      break;
+   case '’' : case '4' : case '5' :
+      DEBUG_GRAF   yLOG_note    ("down first (4,5)");
+      /*> mvprintw (yb, xb - 1, "ëâê");                                               <*/
+      /*> mvprintw (yb, xb - 1, "ëäê");                                               <*/
+      /*> mvprintw (yb, xb - 1, "ÄäÄ");                                               <*/
+      /*> mvprintw (yb, xb - 1, " õ ");                                               <*/
+      /*> mvprintw (yb, xb - 1, " ≥ ");                                               <*/
+      for (i = yb + 1; i < ye; ++i)  mvprintw (i , xb, "Å");
+      break;
+   case '◊' : case '6' : case '7' :
+      DEBUG_GRAF   yLOG_note    ("left first (6.7)");
+      /*> mvprintw (yb, xb, "Ü");                                                     <*/
+      /*> mvprintw (yb, xb, "ä");                                                     <*/
+      for (i = xb - 1; i > xe; --i)  mvprintw (yb, i , "Ä");
+      break;
+   case '÷' : case '2' : case '3' :
+      DEBUG_GRAF   yLOG_note    ("right first (2,3)");
+      /*> mvprintw (yb, xb, "á");                                                     <*/
+      /*> mvprintw (yb, xb, "ä");                                                     <*/
+      for (i = xb + 1; i < xe; ++i)  mvprintw (yb, i , "Ä");
+      break;
+   default  :
+      break;
+   }
+   /*---(turn symbol)--------------------*/
+   switch (c) {
+   case '1' :  mvprintw (ye, xb    , "É");  break;
+   case '2' :  mvprintw (yb, xe    , "Ö");  break;
+   case '3' :  mvprintw (yb, xe    , "Ç");  break;
+   case '4' :  mvprintw (ye, xb    , "Ñ");  break;
+   case '5' :  mvprintw (ye, xb    , "Ö");  break;
+   case '6' :  mvprintw (yb, xe    , "É");  break;
+   case '7' :  mvprintw (yb, xe    , "Ñ");  break;
+   case '8' :  mvprintw (ye, xb    , "Ç");  break;
+   }
+   /*---(second leg)---------------------*/
+   switch (c) {
+   case '1' : case '4' :
+      DEBUG_GRAF   yLOG_note    ("right second (1,4)");
+      for (i = xb + 1; i < xe; ++i)  mvprintw (ye, i , "Ä");
+      break;
+   case '2' : case '7' :
+      DEBUG_GRAF   yLOG_note    ("up second (2,7)");
+      for (i = yb - 1; i > ye; --i)  mvprintw (i , xe, "Å");
+      break;
+   case '3' : case '6' :
+      DEBUG_GRAF   yLOG_note    ("down second (3,6)");
+      for (i = yb + 1; i < ye; ++i)  mvprintw (i , xe, "Å");
+      break;
+   case '5' : case '8' :
+      DEBUG_GRAF   yLOG_note    ("left second (5,8)");
+      for (i = xb - 1; i > xe; --i)  mvprintw (ye, i , "Ä");
+      break;
+   }
+   /*---(final point)--------------------*/
+   mvprintw (ye, xe    , "œ");
+   /*---(complete)-----------------------*/
+   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
+
+char
+yvicurses_notes         (void)
+{
+   char        rc          =    0;
+   int         i           =    0;
+   short       x, y;
+   uchar       m, s, w, h;
+   uchar       t           [LEN_HUND]  = "";
+   uchar       c;
+   short       xb, yb, xe, ye;
+   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
+   if (yVIEW_note_showing () == 0) {
+      DEBUG_GRAF   yLOG_note    ("note showing mode is OFF");
+      DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
+      return 0;
+   }
+   DEBUG_GRAF   yLOG_note    ("note showing mode is ON");
+   for (i = 0; i < 20; ++i) {
+      rc = yVIEW_note_data (i, &m, &s, &x, &y, &w, &h, t, &c, &xb, &yb, &xe, &ye);
+      if (rc < 0)  break;
+      DEBUG_GRAF   yLOG_complex  ("note"      , "%2di, %2dm, %4dx, %4dw, %4dy, %4dh, %c, %s", i, m, x, w, y, h, s, t);
+      if (s == ')') {
+         DEBUG_GRAF   yLOG_note    ("title type");
+         yVICURSES_by_name ("n_main");
+      } else if (s == '!') {
+         DEBUG_GRAF   yLOG_note    ("warning type");
+         yVICURSES_by_name ("n_warn");
+      } else if (i == m) {
+         DEBUG_GRAF   yLOG_note    ("current type");
+         yVICURSES_by_name ("n_curr");
+      } else {
+         DEBUG_GRAF   yLOG_note    ("previous type");
+         yVICURSES_by_name ("n_prev");
+      }
+      yvicurses_notes_draw (x, y, w, h, t);
+      yVICURSES_by_name ("n_line");
+      /*> if (i == m)   yVICURSES_by_name ("n_line");                                 <* 
+       *> else          yVICURSES_by_name ("n_dark");                                 <*/
+      yvicurses_notes_line (c, xb, yb, xe, ye);
+   }
+   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
+   return 0;
+}
 
 

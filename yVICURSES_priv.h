@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0k"
-#define     P_VERTXT    "quick fix to only show float if main part NOT shown"
+#define     P_VERNUM    "2.0l"
+#define     P_VERTXT    "update to yURG_by_name after yURG change"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -55,6 +55,7 @@
 #include    <yLOG.h>              /* heatherly program logging                */
 #include    <ySTR.h>              /* heatherly string processing              */
 /*---(custom vikeys)---------------------*/
+#include    <yVIHUB.h>            /* heatherly vikeys key handling           */
 #include    <yKEYS.h>             /* heatherly vikeys key handling           */
 #include    <yMODE.h>             /* heatherly vikeys mode tracking          */
 #include    <yMACRO.h>            /* heatherly vikeys macro processing       */
@@ -101,7 +102,10 @@ struct cMY {
    int         tall;              /* maximum y-coordinate                    */
    int         x_cur;
    int         y_cur;
+   int         x_menu;
+   int         y_menu;
    char        p_formula;         /* formula configuration                   */
+   char        redraw;
 };
 extern tMY         myVICURSES;
 
@@ -172,6 +176,7 @@ char        yvicurses_keys          (void);
 /*---(fancy)----------------*/
 char        yvicurses_univs         (void);
 char        yvicurses_menus         (void);
+char        yvicurses_notes         (void);
 /*---(source)---------------*/
 char        yvicurses__display      (char a_part, char a_loc, char a_style);
 char        yvicurses_formula       (void);
@@ -183,6 +188,7 @@ char        yvicurses_command       (void);
 char        yvicurses_float         (void);
 /*---(done)-----------------*/
 
+char        yVICURSES_redraw        (void);
 
 #endif
 
