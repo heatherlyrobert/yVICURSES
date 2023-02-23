@@ -359,6 +359,7 @@ yvicurses_color_init    (void)
    yVICURSES_color  ("n_warn"    , "note, displaying a warning"                         , 'R' , 'r' );
    yVICURSES_color  ("n_curr"    , "note, current note item"                            , 'y' , 'Y' );
    yVICURSES_color  ("n_prev"    , "note, old note item"                                , 'Y' , 'y' );
+   yVICURSES_color  ("n_grid"    , "note, grid boxes"                                   , 'P' , 'p' );
    yVICURSES_color  ("n_line"    , "note, connector line"                               , 'Y' , '-' );
    yVICURSES_color  ("n_dark"    , "note, connector line darkened"                      , 'y' , '-' );
    /*---(headers)--------*/
