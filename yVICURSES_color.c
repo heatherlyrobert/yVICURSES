@@ -3,26 +3,35 @@
 #include    "yVICURSES.h"
 #include    "yVICURSES_priv.h"
 
-
+/*>                                                                                   <* 
+ *> 'w'  '0'                                                                          <* 
+ *> 'r'  '1'                                                                          <* 
+ *> 'o'  '2'                                                                          <* 
+ *> 'y'  '3'                                                                          <* 
+ *> 'g'  '4'                                                                          <* 
+ *> 'b'  '5'                                                                          <* 
+ *> 'p'  '6'                                                                          <* 
+ *> 'c'  '7'                                                                          <* 
+ *>                                                                                   <*/
 
 tBASIC  g_primary [MAX_PRIMARY] = {
    {  '-' , "trn" , "transparent"     , -1                },
-   {  'k' , "blk" , "black"           , COLOR_BLACK       },
+   {  'w' , "brn" , "d.brown"         , COLOR_BLACK       },
    {  'r' , "red" , "d.red"           , COLOR_RED         },
    {  'g' , "grn" , "d.green"         , COLOR_GREEN       },
    {  'y' , "yel" , "d.yellow"        , COLOR_YELLOW      },
    {  'b' , "blu" , "d.blue"          , COLOR_BLUE        },
-   {  'm' , "mag" , "d.magenta"       , COLOR_MAGENTA     },
-   {  'c' , "cyn" , "d.cyan"          , COLOR_CYAN        },
-   {  'w' , "whi" , "brown"           , COLOR_WHITE       },
-   {  'K' , "BLK" , "grey"            , COLOR_BLACK       },
+   {  'p' , "pur" , "d.purple"        , COLOR_MAGENTA     },
+   {  'o' , "org" , "d.orange"        , COLOR_CYAN        },
+   {  'c' , "cri" , "d.crimson"       , COLOR_WHITE       },
+   {  'W' , "BRN" , "b.brown"         , COLOR_BLACK       },
    {  'R' , "RED" , "l.red"           , COLOR_RED         },
    {  'G' , "GRN" , "l.green"         , COLOR_GREEN       },
    {  'Y' , "YEL" , "l.yellow"        , COLOR_YELLOW      },
    {  'B' , "BLU" , "l.blue"          , COLOR_BLUE        },
-   {  'M' , "MAG" , "l.magenta"       , COLOR_MAGENTA     },
-   {  'C' , "CYN" , "l.cyan"          , COLOR_CYAN        },
-   {  'W' , "WHI" , "white"           , COLOR_WHITE       },
+   {  'P' , "PUR" , "l.purple"        , COLOR_MAGENTA     },
+   {  'O' , "ORG" , "l.organe"        , COLOR_CYAN        },
+   {  'C' , "CRI" , "l.crimson"       , COLOR_WHITE       },
    {  0   , "---" , "end-of-colors"   , -1                },
 };
 
@@ -111,12 +120,20 @@ yvicurses__by_pair      (int a_pair)
 {
    char        rce         =  -10;
    int         i           =    0;
+   DEBUG_GRAF  yLOG_enter   (__FUNCTION__);
+   DEBUG_GRAF  yLOG_value   ("a_pair"    , a_pair);
+   DEBUG_GRAF  yLOG_value   ("g_ncolor"  , g_ncolor);
    for (i = 0; i < g_ncolor; ++i) {
+      DEBUG_GRAF  yLOG_complex ("value"     , "%2d %-8.8s %c %c %d", i, g_colors [i].terse, g_colors [i].fg, g_colors [i].bg, g_colors [i].value);
       if (g_colors [i].value != a_pair)                continue;
+      DEBUG_GRAF  yLOG_note    ("FOUND IT");
       sprintf (g_print, "%-8.8s f=%c b=%c  %s",
-      g_colors [i].terse, g_colors [i].fg, g_colors [i].bg, g_colors [i].desc);
+            g_colors [i].terse, g_colors [i].fg, g_colors [i].bg, g_colors [i].desc);
+      DEBUG_GRAF  yLOG_info    ("g_print"   , g_print);
+      DEBUG_GRAF  yLOG_exit    (__FUNCTION__);
       return g_print;
    }
+   DEBUG_GRAF  yLOG_exit    (__FUNCTION__);
    return "n/a";
 }
 
@@ -156,7 +173,7 @@ yVICURSES_color         (char *a_terse, char *a_desc, char a_fg, char a_bg)
    DEBUG_GRAF  yLOG_info    ("terse"     , a_terse);
    /*---(retrieve primaries)-------------*/
    x_fg = yvicurses__primary  (a_fg);
-   if (x_fg < -1)   x_fg  = yvicurses__primary  ('w');
+   if (x_fg < -1)   x_fg  = yvicurses__primary  ('c');
    x_bg = yvicurses__primary  (a_bg);
    if (x_bg < -1)   x_bg  = yvicurses__primary  ('-');
    /*---(save)---------------------------*/
@@ -225,89 +242,32 @@ yVICURSES_at_loc        (short x, short y)
    return g_print;
 }
 
+char*
+yVICURSES_at_str        (short x, short y, short a_wide, short a_tall)
+{
+   long        x_loc       =    0;
+   uchar       x_ch        =    0;
+   int         iy, ix;
+   char        t           [LEN_TERSE] = "";
+   strcpy  (g_print, "");
+   for (iy = 0; iy < a_tall; ++iy) {
+      for (ix = 0; ix < a_wide; ++ix) {
+         x_loc  = mvwinch (stdscr, y + iy, x + ix);
+         x_ch   = x_loc & A_CHARTEXT;
+         sprintf (t, "%c", x_ch);
+         strlcat (g_print, t, LEN_FULL);
+      }
+      if (iy < a_tall - 1)  strlcat (g_print, "¨", LEN_FULL);
+   }
+   return g_print;
+}
+
 
 
 /*====================------------------------------------====================*/
 /*===----                        program level                         ----===*/
 /*====================------------------------------------====================*/
 static void      o___PROGRAM_________________o (void) {;}
-
-char         /*-> tbd --------------------------------[ ------ [gc.842.031.62]*/ /*-[02.0000.014.!]-*/ /*-[--.---.---.--]-*/
-yvicurses_color_init_OLD(void)
-{
-   /*---(header)----------------------*/
-   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   /*---(globals)------------------------*//*-------------------------------------------------fg----bg--*/
-   g_ncolor = 0;
-   /*---(window parts)-------------------*/
-   yVICURSES_color  ("w_titl"    , "window, normal title"                               , 'k' , 'K' );
-   yVICURSES_color  ("w_vers"    , "window, version number"                             , 'k' , 'K' );
-   yVICURSES_color  ("w_sbar"    , "window, normal status"                              , 'k' , '!' );
-   yVICURSES_color  ("w_cmds"    , "window, command message"                            , 'y' , '-' );
-   yVICURSES_color  ("w_keys"    , "window, keystoke display"                           , 'r' , '-' );
-   /*---(universes)----------------------*/
-   yVICURSES_color  ("u_back"    , "window, universe/buffers"                           , 'K' , 'k' );
-   yVICURSES_color  ("u_curr"    , "window, universe/buffers"                           , 'Y' , 'k' );
-   yVICURSES_color  ("u_used"    , "window, universe/buffers"                           , 'G' , 'k' );
-   yVICURSES_color  ("u_place"   , "window, universe/buffers"                           , 'R' , 'k' );
-   /*---(trouble)------------------------*/
-   yVICURSES_color  ("!_warn"    , "trouble, warning"                                   , 'w' , 'R' );
-   yVICURSES_color  ("!_errs"    , "trouble, error"                                     , 'W' , 'R' );
-   /*---(formula modes)------------------*/
-   yVICURSES_color  ("i_maps"    , "map mode (2d review of sheet/cell collection"       , 'k' , 'Y' );
-   yVICURSES_color  ("i_srcs"    , "source mode (single cell review)"                   , 'k' , 'G' );
-   yVICURSES_color  ("i_treg"    , "text register sub-mode"                             , 'k' , 'C' );
-   yVICURSES_color  ("i_inpt"    , "input sub-mode"                                     , 'k' , 'B' );
-   yVICURSES_color  ("i_repl"    , "replace sub-mode"                                   , 'k' , 'M' );
-   yVICURSES_color  ("i_wand"    , "wander sub-mode"                                    , 'k' , 'R' );
-   yVICURSES_color  ("i_sele"    , "source mode text selection"                         , 'k' , 'W' );
-   /*---(visual)---------*/
-   yVICURSES_color  ("v_curr"    , "current cell"                                       , 'k' , 'Y' );
-   yVICURSES_color  ("v_root"    , "root of visual selection"                           , 'K' , 'k' );
-   yVICURSES_color  ("v_fill"    , "selected, not root/curr"                            , 'Y' , 'y' );
-   /*---(marking)--------*/
-   yVICURSES_color  ("m_hint"    , "marks for extended hinting"                         , 'C' , 'c' );
-   yVICURSES_color  ("m_temp"    , "marks for temporary locations"                      , 'Y' , 'y' );
-   yVICURSES_color  ("m_srch"    , "marks for search results"                           , 'R' , 'r' );
-   /*---(menus)----------*/
-   yVICURSES_color  ("m_back"    , "menu, background"                                   , 'k' , '!' );
-   yVICURSES_color  ("m_cent"    , "menu, center webbing"                               , 'c' , 'k' );
-   yVICURSES_color  ("m_bull"    , "menu, bullet"                                       , 'C' , 'k' );
-   yVICURSES_color  ("m_menu"    , "menu, normal item"                                  , 'G' , 'k' );
-   yVICURSES_color  ("m_cant"    , "menu, item not available"                           , 'w' , 'y' );
-   yVICURSES_color  ("m_errs"    , "menu, item in error"                                , 'R' , 'y' );
-   /*---(overlays)-------*/
-   yVICURSES_color  ("m_main"    , "note, main title/subject"                           , 'W' , 'M' );
-   yVICURSES_color  ("m_warn"    , "note, displaying a warning"                         , 'W' , 'R' );
-   yVICURSES_color  ("m_curr"    , "note, current note item"                            , 'k' , 'Y' );
-   yVICURSES_color  ("m_prev"    , "note, old note item"                                , 'Y' , 'y' );
-   /*---(headers)--------*/
-   yVICURSES_color  ("h_curr"    , "header (row/col) current"                           , 'k' , 'y' );
-   yVICURSES_color  ("h_lock"    , "header (row/col) locked in place"                   , 'k' , 'r' );
-   yVICURSES_color  ("h_used"    , "header (row/col) with used cells"                   , 'y' , 'k' );
-   yVICURSES_color  ("h_norm"    , "header (row/col) normal"                            , 'y' , '-' );
-   /*---(dependencies)---*/
-   yVICURSES_color  ("d_reqs"    , "depends, current cell uses this value"              , 'M' , 'm' );
-   yVICURSES_color  ("d_pros"    , "depends, provides a value to current cell"          , 'G' , 'g' );
-   yVICURSES_color  ("d_like"    , "depends, adapts formula from current cell"          , 'B' , 'b' );
-   /*---(cell types)-----*/
-   yVICURSES_color  ("9_norm"   , "numeric, literal"                                    , 'B' , '-' );
-   yVICURSES_color  ("9_form"   , "numeric, formula"                                    , 'G' , '-' );
-   yVICURSES_color  ("9_dang"   , "numeric, complex/dangerous formula"                  , 'R' , '-' );
-   yVICURSES_color  ("9_like"   , "numeric, formula adapted from elsewhere"             , 'w' , '-' );
-   yVICURSES_color  ("#_norm"   , "string, literal"                                     , 'Y' , '-' );
-   yVICURSES_color  ("#_form"   , "string, formula"                                     , 'M' , '-' );
-   yVICURSES_color  ("#_dang"   , "string, complex/dangerous formula"                   , 'R' , '-' );
-   yVICURSES_color  ("#_like"   , "string, formula adapted from elsewhere"              , 'w' , '-' );
-   yVICURSES_color  ("p_rang"   , "range pointer"                                       , 'C' , '-' );
-   yVICURSES_color  ("p_addr"   , "address pointer"                                     , 'C' , '-' );
-   /*---(other)----------*/
-   yVICURSES_color  (">_null"   , "blank cell"                                          , 'b' , '-' );
-   yVICURSES_color  (">_unkn"   , "default for unidentified cells"                      , 'Y' , '-' );
-   /*---(complete)-----------------------*/
-   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
-   return 0;
-}
 
 char         /*-> tbd --------------------------------[ ------ [gc.842.031.62]*/ /*-[02.0000.014.!]-*/ /*-[--.---.---.--]-*/
 yvicurses_color_init    (void)
@@ -317,78 +277,79 @@ yvicurses_color_init    (void)
    /*---(globals)------------------------*//*-------------------------------------------------fg----bg--*/
    g_ncolor = 0;
    /*---(window parts)-------------------*/
-   yVICURSES_color  ("w_titl"    , "window, normal title"                               , 'k' , 'K' );
-   yVICURSES_color  ("w_vers"    , "window, version number"                             , 'k' , 'K' );
-   yVICURSES_color  ("w_sbar"    , "window, normal status"                              , 'k' , 'K' );
-   yVICURSES_color  ("w_cmds"    , "window, command message"                            , 'K' , '-' );
-   yVICURSES_color  ("w_keys"    , "window, keystoke display"                           , 'K' , 'k' );
+   yVICURSES_color  ("w_titl"    , "window, normal title"                               , 'w' , 'W' );
+   yVICURSES_color  ("w_vers"    , "window, version number"                             , 'w' , 'W' );
+   yVICURSES_color  ("w_sbar"    , "window, normal status"                              , 'w' , 'W' );
+   yVICURSES_color  ("w_cmds"    , "window, command message"                            , 'W' , '-' );
+   yVICURSES_color  ("w_keys"    , "window, keystoke display"                           , 'W' , 'w' );
    /*---(universes)----------------------*/
-   yVICURSES_color  ("u_back"    , "window, universe/buffers"                           , 'K' , 'k' );
-   yVICURSES_color  ("u_curr"    , "window, universe/buffers"                           , 'C' , 'k' );
-   yVICURSES_color  ("u_used"    , "window, universe/buffers"                           , 'G' , 'k' );
-   yVICURSES_color  ("u_place"   , "window, universe/buffers"                           , 'R' , 'k' );
+   yVICURSES_color  ("u_back"    , "window, universe/buffers"                           , 'W' , 'w' );
+   yVICURSES_color  ("u_curr"    , "window, universe/buffers"                           , 'O' , 'w' );
+   yVICURSES_color  ("u_used"    , "window, universe/buffers"                           , 'G' , 'w' );
+   yVICURSES_color  ("u_place"   , "window, universe/buffers"                           , 'R' , 'w' );
    /*---(trouble)------------------------*/
-   yVICURSES_color  ("!_warn"    , "trouble, warning"                                   , 'w' , 'R' );
+   yVICURSES_color  ("!_warn"    , "trouble, warning"                                   , 'c' , 'R' );
    yVICURSES_color  ("!_errs"    , "trouble, error"                                     , 'R' , 'r' );
    /*---(formula modes)------------------*/
-   yVICURSES_color  ("i_maps"    , "map mode (2d review of sheet/cell collection"       , 'k' , 'K' );
-   yVICURSES_color  ("i_srcs"    , "source mode (single cell review)"                   , 'k' , 'G' );
-   yVICURSES_color  ("i_treg"    , "text register sub-mode"                             , 'k' , 'C' );
-   yVICURSES_color  ("i_inpt"    , "input sub-mode"                                     , 'k' , 'B' );
-   yVICURSES_color  ("i_repl"    , "replace sub-mode"                                   , 'k' , 'M' );
-   yVICURSES_color  ("i_wand"    , "wander sub-mode"                                    , 'k' , 'R' );
-   yVICURSES_color  ("i_sele"    , "source mode text selection"                         , 'k' , 'W' );
+   yVICURSES_color  ("i_maps"    , "map mode (2d review of sheet/cell collection"       , 'w' , 'W' );
+   yVICURSES_color  ("i_srcs"    , "source mode (single cell review)"                   , 'w' , 'G' );
+   yVICURSES_color  ("i_treg"    , "text register sub-mode"                             , 'w' , 'O' );
+   yVICURSES_color  ("i_inpt"    , "input sub-mode"                                     , 'w' , 'B' );
+   yVICURSES_color  ("i_repl"    , "replace sub-mode"                                   , 'w' , 'P' );
+   yVICURSES_color  ("i_wand"    , "wander sub-mode"                                    , 'w' , 'R' );
+   yVICURSES_color  ("i_sele"    , "source mode text selection"                         , 'w' , 'C' );
    /*---(visual)---------*/
-   yVICURSES_color  ("v_curr"    , "current cell"                                       , 'k' , 'Y' );
-   yVICURSES_color  ("v_root"    , "root of visual selection"                           , 'K' , 'k' );
+   yVICURSES_color  ("v_curr"    , "current cell"                                       , 'w' , 'Y' );
+   yVICURSES_color  ("v_root"    , "root of visual selection"                           , 'W' , 'w' );
    yVICURSES_color  ("v_fill"    , "selected, not root/curr"                            , 'Y' , 'y' );
    /*---(marking)--------*/
-   yVICURSES_color  ("m_hint"    , "marks for extended hinting"                         , 'C' , 'c' );
+   yVICURSES_color  ("m_hint"    , "marks for extended hinting"                         , 'O' , 'o' );
    yVICURSES_color  ("m_temp"    , "marks for temporary locations"                      , 'Y' , 'y' );
    yVICURSES_color  ("m_srch"    , "marks for search results"                           , 'R' , 'r' );
    /*---(menus)----------*/
-   yVICURSES_color  ("m_back"    , "menu, background"                                   , 'K' , 'k' );
-   yVICURSES_color  ("m_edge"    , "menu, outside edge"                                 , 'K' , 'k' );
-   yVICURSES_color  ("m_cent"    , "menu, center webbing"                               , 'K' , 'k' );
-   yVICURSES_color  ("m_bull"    , "menu, bullet"                                       , 'C' , 'k' );
-   yVICURSES_color  ("m_menu"    , "menu, normal item"                                  , 'G' , 'k' );
-   yVICURSES_color  ("m_cant"    , "menu, item not available"                           , 'w' , 'k' );
-   yVICURSES_color  ("m_errs"    , "menu, item in error"                                , 'R' , 'k' );
+   yVICURSES_color  ("m_back"    , "menu, background"                                   , 'W' , 'w' );
+   yVICURSES_color  ("m_edge"    , "menu, outside edge"                                 , 'W' , 'w' );
+   yVICURSES_color  ("m_cent"    , "menu, center webbing"                               , 'W' , 'w' );
+   yVICURSES_color  ("m_bull"    , "menu, bullet"                                       , 'O' , 'w' );
+   yVICURSES_color  ("m_menu"    , "menu, normal item"                                  , 'G' , 'w' );
+   yVICURSES_color  ("m_cant"    , "menu, item not available"                           , 'c' , 'w' );
+   yVICURSES_color  ("m_errs"    , "menu, item in error"                                , 'R' , 'w' );
    /*---(overlays)-------*/
-   yVICURSES_color  ("n_main"    , "note, main title/subject"                           , 'c' , 'C' );
+   yVICURSES_color  ("n_main"    , "note, main title/subject"                           , 'o' , 'O' );
    yVICURSES_color  ("n_warn"    , "note, displaying a warning"                         , 'R' , 'r' );
    yVICURSES_color  ("n_curr"    , "note, current note item"                            , 'y' , 'Y' );
    yVICURSES_color  ("n_prev"    , "note, old note item"                                , 'Y' , 'y' );
    yVICURSES_color  ("n_grid"    , "note, grid boxes"                                   , 'P' , 'p' );
    yVICURSES_color  ("n_line"    , "note, connector line"                               , 'Y' , '-' );
    yVICURSES_color  ("n_dark"    , "note, connector line darkened"                      , 'y' , '-' );
+   yVICURSES_color  ("n_badd"    , "note, bad target end-point"                         , 'R' , 'Y' );
    /*---(headers)--------*/
-   yVICURSES_color  ("h_curr"    , "header (row/col) current"                           , 'C' , 'k' );
-   yVICURSES_color  ("h_lock"    , "header (row/col) locked in place"                   , 'K' , 'r' );
-   yVICURSES_color  ("h_used"    , "header (row/col) with used cells"                   , 'C' , '-' );
-   yVICURSES_color  ("h_norm"    , "header (row/col) normal"                            , 'K' , '-' );
+   yVICURSES_color  ("h_curr"    , "header (row/col) current"                           , 'O' , 'w' );
+   yVICURSES_color  ("h_lock"    , "header (row/col) locked in place"                   , 'W' , 'r' );
+   yVICURSES_color  ("h_used"    , "header (row/col) with used cells"                   , 'O' , '-' );
+   yVICURSES_color  ("h_norm"    , "header (row/col) normal"                            , 'W' , '-' );
    /*---(dependencies)---*/
-   yVICURSES_color  ("d_reqs"    , "depends, current cell uses this value"              , 'M' , 'm' );
+   yVICURSES_color  ("d_reqs"    , "depends, current cell uses this value"              , 'P' , 'p' );
    yVICURSES_color  ("d_pros"    , "depends, provides a value to current cell"          , 'G' , 'g' );
    yVICURSES_color  ("d_like"    , "depends, adapts formula from current cell"          , 'B' , 'b' );
-   yVICURSES_color  ("d_copy"    , "all cells that copy the current one"                , 'W' , 'w' );
+   yVICURSES_color  ("d_copy"    , "all cells that copy the current one"                , 'C' , 'c' );
    /*---(cell types)-----*/
    yVICURSES_color  ("9_norm"   , "numeric, literal"                                    , 'B' , '-' );
    yVICURSES_color  ("9_form"   , "numeric, formula"                                    , 'G' , '-' );
    yVICURSES_color  ("9_dang"   , "numeric, complex/dangerous formula"                  , 'R' , '-' );
-   yVICURSES_color  ("9_like"   , "numeric, formula adapted from elsewhere"             , 'W' , '-' );
-   yVICURSES_color  ("#_norm"   , "string, literal"                                     , 'K' , '-' );
-   yVICURSES_color  ("#_form"   , "string, formula"                                     , 'M' , '-' );
+   yVICURSES_color  ("9_like"   , "numeric, formula adapted from elsewhere"             , 'C' , '-' );
+   yVICURSES_color  ("#_norm"   , "string, literal"                                     , 'W' , '-' );
+   yVICURSES_color  ("#_form"   , "string, formula"                                     , 'P' , '-' );
    yVICURSES_color  ("#_dang"   , "string, complex/dangerous formula"                   , 'R' , '-' );
-   yVICURSES_color  ("#_like"   , "string, formula adapted from elsewhere"              , 'W' , '-' );
-   yVICURSES_color  ("p_rang"   , "literal range pointer"                               , 'C' , '-' );
-   yVICURSES_color  ("p_addr"   , "literal address pointer"                             , 'C' , '-' );
-   yVICURSES_color  ("p_calc"   , "calculated address pointer"                          , 'C' , '-' );
+   yVICURSES_color  ("#_like"   , "string, formula adapted from elsewhere"              , 'C' , '-' );
+   yVICURSES_color  ("p_rang"   , "literal range pointer"                               , 'O' , '-' );
+   yVICURSES_color  ("p_addr"   , "literal address pointer"                             , 'O' , '-' );
+   yVICURSES_color  ("p_calc"   , "calculated address pointer"                          , 'O' , '-' );
    yVICURSES_color  ("p_vars"   , "variable pointer"                                    , 'Y' , '-' );
    /*---(agrios)---------*/
-   yVICURSES_color  ("a_forc"   , "statement to update a value/string"                  , 'W' , '-' );
-   yVICURSES_color  ("a_call"   , "statement to call a function"                        , 'C' , '-' );
-   yVICURSES_color  ("a_curr"   , "agrios macro bouncing-ball tracker"                  , 'k' , 'C' );
+   yVICURSES_color  ("a_forc"   , "statement to update a value/string"                  , 'C' , '-' );
+   yVICURSES_color  ("a_call"   , "statement to call a function"                        , 'O' , '-' );
+   yVICURSES_color  ("a_curr"   , "agrios macro bouncing-ball tracker"                  , 'w' , 'O' );
    /*---(other)----------*/
    yVICURSES_color  (">_null"   , "blank cell"                                          , 'b' , '-' );
    yVICURSES_color  (">_unkn"   , "default for unidentified cells"                      , 'R' , '-' );
