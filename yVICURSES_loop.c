@@ -16,16 +16,16 @@ yvicurses_resize        (void)
    int         x_wide     =    0;
    int         x_tall     =    0;
    /*---(header)-------------------------*/
-   DEBUG_LOOP   yLOG_enter   (__FUNCTION__);
+   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    getmaxyx (stdscr, x_tall, x_wide);
-   DEBUG_LOOP   yLOG_value   ("x_wide"    , x_wide);
-   DEBUG_LOOP   yLOG_value   ("x_tall"    , x_tall);
+   DEBUG_GRAF   yLOG_value   ("x_wide"    , x_wide);
+   DEBUG_GRAF   yLOG_value   ("x_tall"    , x_tall);
    if (myVICURSES.wide != x_wide || myVICURSES.tall != x_tall) {
       yVIEW_resize (x_wide, x_tall, 0);
       myVICURSES.wide = x_wide;
       myVICURSES.tall = x_tall;
    }
-   DEBUG_LOOP   yLOG_exit    (__FUNCTION__);
+   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 

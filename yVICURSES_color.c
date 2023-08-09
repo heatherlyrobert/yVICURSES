@@ -103,6 +103,7 @@ yvicurses__by_name      (char *a_terse)
       DEBUG_GRAF  yLOG_sexitr  (__FUNCTION__, rce);
       return rce;
    }
+   DEBUG_GRAF  yLOG_snote   (a_terse);
    for (i = 0; i < g_ncolor; ++i) {
       if (g_colors [i].terse [0] != a_terse [0])       continue;
       if (strcmp (g_colors [i].terse, a_terse) != 0)   continue;
@@ -349,7 +350,7 @@ yvicurses_color_init    (void)
    /*---(agrios)---------*/
    yVICURSES_color  ("a_forc"   , "statement to update a value/string"                  , 'C' , '-' );
    yVICURSES_color  ("a_call"   , "statement to call a function"                        , 'O' , '-' );
-   yVICURSES_color  ("a_curr"   , "agrios macro bouncing-ball tracker"                  , 'w' , 'O' );
+   yVICURSES_color  ("a_curr"   , "agrios macro bouncing-ball tracker"                  , 'W' , 'w' );
    /*---(other)----------*/
    yVICURSES_color  (">_null"   , "blank cell"                                          , 'b' , '-' );
    yVICURSES_color  (">_unkn"   , "default for unidentified cells"                      , 'R' , '-' );

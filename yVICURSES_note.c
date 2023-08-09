@@ -173,10 +173,11 @@ yvicurses_notes_line    (char a_curr, char c, short xb, short yb, short xe, shor
    if (a_curr)    yVICURSES_by_name ("n_line");
    else           yVICURSES_by_name ("n_dark");
    if (!a_curr && s_fade == 'y') {
+      if (strchr ("Ô18Õ45", c) != NULL)  strcpy (x_beg , "Œ");
+      else                               strcpy (x_beg , "²");
       strcpy (x_vert, "Œ");
       strcpy (x_horz, "²");
-      strcpy (x_beg , "·");
-      strcpy (x_end , "´");
+      strcpy (x_end , "á");
    }
    mvprintw (yb, xb, x_beg);
    /*---(first leg)----------------------*/
