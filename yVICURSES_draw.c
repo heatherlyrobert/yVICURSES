@@ -103,14 +103,14 @@ char  yvicurses_keys          (void)  { return yvicurses__text (YVIEW_KEYS); }
 static void  o___FANCY___________o () { return; }
 
 char
-yvicurses__small        (char r_small [LEN_LABEL])
+yvicurses__small        (char r_small [LEN_TITLE])
 {
    char        rc          =    0;
    int         i           =    0;
    int         c           =    0;
    int         x_off       =    0;
    uchar       x_used      =  '·';
-   strcpy (r_small, " ··· ··· ··· ···");
+   strcpy (r_small, " ··· ··· ··· ··· ···");
    rc = yMAP_by_cursor (YMAP_UNIV, YDLST_HEAD, NULL, NULL, NULL, &x_used);
    while (rc >= 0) {
       if (x_used == YMAP_USED || x_used == YMAP_PLACE) {
@@ -136,9 +136,10 @@ yvicurses_univs         (void)
    char        x_main      [LEN_RECD]  = "";
    int         x_last      =   -1;
    char       *x_list      = YSTR_UNIV;
+   char       *x_extra     = " ·  ··u ·s   0 1 2 3 4 5 6 7 8 9 · A B C D E F G H I J K L M N O P Q R S T U V W X Y Z · ® ¯ ¤ ¢";  /* 86 */
    char       *x_large     = " 0 1 2 3 4 5 6 7 8 9 · A B C D E F G H I J K L M N O P Q R S T U V W X Y Z · ® ¯ ¤ ¢";  /* 86 */
    char       *x_med       = " 012345·6789AB·CDEFGH·IJKLMN·OPQRST·UVWXYZ·®¯¤¢";  /* 47 */
-   char        x_small     [LEN_LABEL] = " ··· ··· ··· ···";  /* 16 */
+   char        x_small     [LEN_TITLE] = " ··· ··· ··· ··· ···";
    char       *x_disp      = NULL;
    char       *p           = NULL;
    ushort      x_pos       =    0;
@@ -148,13 +149,16 @@ yvicurses_univs         (void)
    int         i           =    0;
    ushort      c           =    0;
    char        x_id        =  ' ';
+   char        x_usr       =    0;
+   char        x_sys       =    0;
    /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    /*---(get size)-----------------------*/
    yVIEW_curses (YVIEW_BUFFER, x_name, &x_on, NULL, NULL, NULL, &x_left, &x_wide, &x_bott, &x_tall);
    DEBUG_GRAF   yLOG_complex  (x_name, "%c on %c, %3dl, %3dw, %3db, %3dt", YVIEW_BUFFER, x_on, x_left, x_wide, x_bott, x_tall);
    /*---(prepare sizes)------------------*/
-   if      (x_wide >= 86)  x_disp = x_large;
+   if      (x_wide >= 98)  x_disp = x_extra;
+   else if (x_wide >= 86)  x_disp = x_large;
    else if (x_wide >= 47)  x_disp = x_med;
    else {
       yvicurses__small (x_small);
@@ -176,27 +180,50 @@ yvicurses_univs         (void)
       DEBUG_GRAF   yLOG_point   ("p"         , p);
       x_pos = p - x_disp;
       DEBUG_GRAF   yLOG_value   ("x_pos"     , x_pos);
-      if (c == i)  x_used = YMAP_CURR;
+      switch (x_used) {
+      case YMAP_USED  : case YMAP_PLACE :
+         if (strchr ("®¯¤¢", x_id) != NULL)  ++x_sys;
+         else                                ++x_usr;
+         break;
+      }
+      if (c == i) {
+         x_used = YMAP_CURR;
+         if (x_disp == x_extra) {
+            yVICURSES_by_name ("u_back");
+            mvprintw (x_bott, x_left + 1, "%c"  , x_id);
+         }
+      }
       DEBUG_GRAF   yLOG_complex  ("review", "%3dl, %3do, %3dp, %2dc, %c, %c", x_left, x_off, x_pos, i, x_used, x_id);
       switch (x_used) {
       case YMAP_CURR   :
          yVICURSES_by_name ("u_curr");
-         if      (x_disp == x_large)  mvprintw (x_bott, x_left +  x_pos - 1, " %c ", x_id);
-         else                         mvprintw (x_bott, x_left +  x_pos - 0, "%c"  , x_id);
          break;
       case YMAP_USED  :
          yVICURSES_by_name ("u_used");
-         mvprintw (x_bott, x_left +  x_pos - 0, "%c"  , x_id);  break;
          break;
       case YMAP_PLACE :
+         yVICURSES_by_name ("u_place");
+         break;
+      }
+      switch (x_used) {
+      case YMAP_CURR   : case YMAP_USED  : case YMAP_PLACE :
          if (x_disp != x_small) {
-            yVICURSES_by_name ("u_place");
-            mvprintw (x_bott, x_left +  x_pos - 0, "%c"  , x_id);  break;
+            mvprintw (x_bott, x_left +  x_pos - 0, "%c"  , x_id);
          }
          break;
       }
       rc = yMAP_by_cursor (YMAP_UNIV, YDLST_NEXT, &x_pos, &x_ref, NULL, &x_used);
       ++i;
+   }
+   DEBUG_GRAF   yLOG_value   ("x_usr"     , x_usr);
+   DEBUG_GRAF   yLOG_value   ("x_sys"     , x_sys);
+   if (x_disp == x_extra) {
+      yVICURSES_by_name ("u_back");
+      strlpadn (x_usr, t, '.', '>', 2);
+      mvprintw (x_bott, x_left + 4, "%s", t);
+      strlpadn (x_sys, t, '.', '>', 1);
+      mvprintw (x_bott, x_left + 8, "%s", t);
+
    }
    /*---(complete)-----------------------*/
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
