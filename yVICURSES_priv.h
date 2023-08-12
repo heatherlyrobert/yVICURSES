@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0o"
-#define     P_VERTXT    "updating debugging macros slightly to decrease normal volume"
+#define     P_VERNUM    "2.0p"
+#define     P_VERTXT    "universe inventory now has three automatic formats for window widths"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"

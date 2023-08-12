@@ -285,7 +285,7 @@ yvicurses_color_init    (void)
    yVICURSES_color  ("w_keys"    , "window, keystoke display"                           , 'W' , 'w' );
    /*---(universes)----------------------*/
    yVICURSES_color  ("u_back"    , "window, universe/buffers"                           , 'W' , 'w' );
-   yVICURSES_color  ("u_curr"    , "window, universe/buffers"                           , 'O' , 'w' );
+   yVICURSES_color  ("u_curr"    , "window, universe/buffers"                           , 'P' , 'w' );
    yVICURSES_color  ("u_used"    , "window, universe/buffers"                           , 'G' , 'w' );
    yVICURSES_color  ("u_place"   , "window, universe/buffers"                           , 'R' , 'w' );
    /*---(trouble)------------------------*/
