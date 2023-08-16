@@ -101,8 +101,10 @@ char yVICURSES_redraw   (void)  { myVICURSES.redraw = 'y'; return 0; }
 char
 yvicurses_cleanse       (void)
 {
+   char        x_redraw  = '-';
    yvicurses_resize ();
-   if (myVICURSES.redraw == 'y') clear  ();
+   yVIEW_redraw (&x_redraw);
+   if (x_redraw == 'y' || myVICURSES.redraw == 'y') clear  ();
    myVICURSES.redraw = '-';
    return 0;
 }

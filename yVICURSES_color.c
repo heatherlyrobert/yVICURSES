@@ -165,13 +165,13 @@ yVICURSES_color         (char *a_terse, char *a_desc, char a_fg, char a_bg)
    DEBUG_GRAF  yLOG_info    ("a_terse"   , a_terse);
    /*---(identify)-----------------------*/
    n = yvicurses__by_name (a_terse);
+   DEBUG_GRAF  yLOG_value   ("n"         , n);
    if (n <  0) {
       n = g_ncolor;
       DEBUG_GRAF  yLOG_value   ("new"       , n);
    } else {
       DEBUG_GRAF  yLOG_value   ("existing"  , n);
    }
-   DEBUG_GRAF  yLOG_info    ("terse"     , a_terse);
    /*---(retrieve primaries)-------------*/
    x_fg = yvicurses__primary  (a_fg);
    if (x_fg < -1)   x_fg  = yvicurses__primary  ('c');

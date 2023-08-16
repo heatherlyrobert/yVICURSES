@@ -12,7 +12,7 @@ static  char  s_fade = '-';
 static void  o___MENU____________o () { return; }
 
 char
-yvicurses_notes_grid    (short a_minx, short a_miny, short a_maxx, short a_maxy)
+yvicurses_notes_grid    (char a_style, short a_minx, short a_miny, short a_maxx, short a_maxy)
 {
    short       xm, ym;
    short       xu, yu;
@@ -42,49 +42,51 @@ yvicurses_notes_grid    (short a_minx, short a_miny, short a_maxx, short a_maxy)
    xn = (a_maxx - a_minx - 1) /  8.0;
    xc = a_minx;
    /*---(display x)----------------------*/
-   for (x = 0, xc = a_minx; xc <= a_maxx; xc++) {
-      mvprintw (ym, round (xc), " ");
-      mvprintw (yu, round (xc), " ");
-      mvprintw (yl, round (xc), " ");
-      ++x;
-   }
-   for (x = 0, xc = a_minx; xc <= a_maxx; xc += xi) {
-      mvprintw (ym, round (xc), "%c", x_fine [x]);
-      mvprintw (yu, round (xc), "%c", x_fine [x]);
-      mvprintw (yl, round (xc), "%c", x_fine [x]);
-      ++x;
-   }
-   for (x = 0, xc = a_minx; xc <= a_maxx; xc += xn) {
-      if (x != 4)  mvprintw (ym - 1, round (xc), "%c", x_norm [x]);
-      ++x;
+   /*> for (x = 0, xc = a_minx; xc <= a_maxx; xc++) {                                 <* 
+    *>    mvprintw (ym, round (xc), " ");                                             <* 
+    *>    mvprintw (yu, round (xc), " ");                                             <* 
+    *>    mvprintw (yl, round (xc), " ");                                             <* 
+    *>    ++x;                                                                        <* 
+    *> }                                                                              <*/
+   if (a_style == '-') {
+      for (x = 0, xc = a_minx; xc <= a_maxx; xc += xn, ++x) {
+         if (x != 4)  mvprintw (ym - 1, round (xc), "%c", x_norm [x]);
+      }
+   } else {
+      for (x = 0, xc = a_minx; xc <= a_maxx; xc += xi, ++x) {
+         mvprintw (ym, round (xc), "%c", x_fine [x]);
+         if (a_style == '3') mvprintw (yu, round (xc), "%c", x_fine [x]);
+         if (a_style == '3') mvprintw (yl, round (xc), "%c", x_fine [x]);
+      }
    }
    /*---(display y)----------------------*/
-   for (y = 0, yc = a_maxy; yc >= a_miny; yc--) {
-      mvprintw (round (yc), xm, " ");
-      mvprintw (round (yc), xu, " ");
-      mvprintw (round (yc), xl, " ");
-      ++y;
-   }
-   for (y = 0, yc = a_maxy; yc >= a_miny; yc -= yi) {
-      mvprintw (round (yc), xm, "%c", x_fine [y]);
-      mvprintw (round (yc), xu, "%c", x_fine [y]);
-      mvprintw (round (yc), xl, "%c", x_fine [y]);
-      ++y;
-   }
-   for (y = 0, yc = a_miny; yc <= a_maxy; yc += yn) {
-      if (y != 4)  mvprintw (round (yc) + 1, xm - 1, "%c", x_norm [y]);
-      ++y;
+   /*> for (y = 0, yc = a_maxy; yc >= a_miny; yc--) {                                 <* 
+    *>    mvprintw (round (yc), xm, " ");                                             <* 
+    *>    mvprintw (round (yc), xu, " ");                                             <* 
+    *>    mvprintw (round (yc), xl, " ");                                             <* 
+    *>    ++y;                                                                        <* 
+    *> }                                                                              <*/
+   if (a_style == '-') {
+      for (y = 0, yc = a_miny; yc <= a_maxy; yc += yn, ++y) {
+         if (y != 4)  mvprintw (round (yc) + 1, xm - 1, "%c", x_norm [y]);
+      }
+   } else {
+      for (y = 0, yc = a_maxy; yc >= a_miny; yc -= yi, ++y) {
+         mvprintw (round (yc), xm, "%c", x_fine [y]);
+         if (a_style == '3') mvprintw (round (yc), xu, "%c", x_fine [y]);
+         if (a_style == '3') mvprintw (round (yc), xl, "%c", x_fine [y]);
+      }
    }
    /*---(intersections)------------------*/
-   mvprintw (yu, xu, "´");
-   mvprintw (yu, xm, "´");
-   mvprintw (yu, xl, "´");
-   mvprintw (yl, xu, "´");
-   mvprintw (yl, xm, "´");
-   mvprintw (yl, xl, "´");
-   mvprintw (ym, xu, "´");
-   mvprintw (ym, xm, "´");
-   mvprintw (ym, xl, "´");
+   /*> mvprintw (yu, xu, "´");                                                        <* 
+    *> mvprintw (yu, xm, "´");                                                        <* 
+    *> mvprintw (yu, xl, "´");                                                        <* 
+    *> mvprintw (yl, xu, "´");                                                        <* 
+    *> mvprintw (yl, xm, "´");                                                        <* 
+    *> mvprintw (yl, xl, "´");                                                        <* 
+    *> mvprintw (ym, xu, "´");                                                        <* 
+    *> mvprintw (ym, xm, "´");                                                        <* 
+    *> mvprintw (ym, xl, "´");                                                        <*/
    /*---(complete)-----------------------*/
    return 0;
 }
@@ -245,7 +247,7 @@ yvicurses_notes         (void)
    int         i           =    0;
    short       x, y;
    uchar       m, s, w, h;
-   uchar       t           [LEN_HUND]  = "";
+   uchar       t           [LEN_RECD]  = "";
    uchar       c;
    short       xb, yb, xe, ye;
    char        x_curr      =  'Y';
@@ -271,14 +273,14 @@ yvicurses_notes         (void)
    }
    yVICURSES_color ("n_line", NULL, x_lcurr, '-');
    yVICURSES_color ("n_dark", NULL, x_lprev, '-');
-   for (i = 0; i < 20; ++i) {
+   for (i = 0; i < LEN_TITLE; ++i) {
       rc = yVIEW_note_data (i, &m, &s, &x, &y, &w, &h, t, &c, &xb, &yb, &xe, &ye);
       if (rc < 0)  break;
       DEBUG_GRAF   yLOG_complex  ("note"      , "%2di, %2dm, %4dx, %4dw, %4dy, %4dh, %c, %s", i, m, x, w, y, h, s, t);
       if (s == (uchar) '|') {
          DEBUG_GRAF   yLOG_note    ("target grid");
          yVICURSES_by_name ("n_grid");
-         yvicurses_notes_grid (x, y, x + w, y + h);
+         yvicurses_notes_grid (t [0], x, y, x + w, y + h);
          continue;
       } else if (s == ')') {
          DEBUG_GRAF   yLOG_note    ("title type");
