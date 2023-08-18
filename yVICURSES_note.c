@@ -6,10 +6,12 @@
 
 static  char  s_fade = '-';
 
+
+
 /*====================------------------------------------====================*/
 /*===----                      menu focused                            ----===*/
 /*====================------------------------------------====================*/
-static void  o___MENU____________o () { return; }
+static void  o___NOTE____________o () { return; }
 
 char
 yvicurses_notes_grid    (char a_style, short a_minx, short a_miny, short a_maxx, short a_maxy)
@@ -239,6 +241,13 @@ yvicurses_notes_line    (char a_curr, char c, short xb, short yb, short xe, shor
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;
 }
+
+
+
+/*====================------------------------------------====================*/
+/*===----                      menu focused                            ----===*/
+/*====================------------------------------------====================*/
+static void  o___DRIVER__________o () { return; }
 
 char
 yvicurses_notes         (void)

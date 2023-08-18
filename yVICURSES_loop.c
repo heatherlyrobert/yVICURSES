@@ -128,6 +128,8 @@ yvicurses_refresh       (void)
    /*> mvprintw (0,0,"%3dw,%3dt", myVICURSES.wide, myVICURSES.tall);                                    <*/
    if (yMODE_curr () == SMOD_MENUS) {
       mvprintw (myVICURSES.y_menu, myVICURSES.x_menu, "");
+   } else if (yMODE_curr () == UMOD_HISTORY) {
+      mvprintw (myVICURSES.y_menu, myVICURSES.x_menu, "");
    } else {
       mvprintw (myVICURSES.y_cur , myVICURSES.x_cur , "");
    }

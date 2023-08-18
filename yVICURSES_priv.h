@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0r"
-#define     P_VERTXT    "many notes improvements and fixes"
+#define     P_VERNUM    "2.0s"
+#define     P_VERTXT    "command history is working again, needs more work"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -106,6 +106,7 @@ struct cMY {
    int         y_menu;
    char        p_formula;         /* formula configuration                   */
    char        redraw;
+   char        cursor;
 };
 extern tMY         myVICURSES;
 
@@ -189,6 +190,11 @@ char        yvicurses_float         (void);
 /*---(done)-----------------*/
 
 char        yVICURSES_redraw        (void);
+
+
+char        yvicurses_history       (void);
+
+
 
 #endif
 

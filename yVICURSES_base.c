@@ -163,6 +163,7 @@ yVICURSES_init          (char *a_title, char *a_version, char a_mode)
    use_default_colors   ();
    use_legacy_coding    (2);       /* also display characters 128 - 156 */
    yvicurses_color_init ();
+   myVICURSES.cursor = 'y';
    /*---(library inits)------------------*/
    rc = yVICURSES__wave_one (a_title, a_version, a_mode);
    DEBUG_GRAF   yLOG_value   ("wave one", rc);
@@ -203,6 +204,7 @@ yVICURSES_init          (char *a_title, char *a_version, char a_mode)
    yVIEW_simple (YVIEW_KEYS   , 0, 0, yvicurses_keys);
    yVIEW_simple (YVIEW_BUFFER , 0, 0, yvicurses_univs);
    yVIEW_simple (YVIEW_NOTES  , 0, 0, yvicurses_notes);
+   yVIEW_simple (YVIEW_HISTORY, 0, 0, yvicurses_history);
    yVIEW_menus  (yvicurses_menus);
    myVICURSES.p_formula = 's';
    yVIEW_switch_add (YVIEW_FORMULA, "min"  , "", yvicurses_formula_min  , "minimal formula display");
