@@ -434,46 +434,11 @@ char
 yvicurses_formula       (void)
 {
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   yvicurses__display (YVIEW_FORMULA, YVIEW_FORMULA, myVICURSES.p_formula);
+   yvicurses__display (YVIEW_FORMULA, YVIEW_FORMULA, yVIEW_formula ());
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;
 }
 
-char
-yvicurses_formula_min   (void)
-{
-   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   myVICURSES.p_formula = '-';
-   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
-   return 0;
-}
-
-char
-yvicurses_formula_small (void)
-{
-   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   myVICURSES.p_formula = 's';
-   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
-   return 0;
-}
-
-char
-yvicurses_formula_label (void)
-{
-   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   myVICURSES.p_formula = 'l';
-   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
-   return 0;
-}
-
-char
-yvicurses_formula_max   (void)
-{
-   DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
-   myVICURSES.p_formula = 'x';
-   DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
-   return 0;
-}
 
 char
 yvicurses_command       (void)

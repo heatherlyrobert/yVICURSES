@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0t"
-#define     P_VERTXT    "history presentation cleaned up a little"
+#define     P_VERNUM    "2.0u"
+#define     P_VERTXT    "moved formula bar control to yVIEW (cleaner)"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -104,7 +104,6 @@ struct cMY {
    int         y_cur;
    int         x_menu;
    int         y_menu;
-   char        p_formula;         /* formula configuration                   */
    char        redraw;
    char        cursor;
 };
@@ -181,10 +180,10 @@ char        yvicurses_notes         (void);
 /*---(source)---------------*/
 char        yvicurses__display      (char a_part, char a_loc, char a_style);
 char        yvicurses_formula       (void);
-char        yvicurses_formula_min   (void);
-char        yvicurses_formula_small (void);
-char        yvicurses_formula_label (void);
-char        yvicurses_formula_max   (void);
+/*> char        yvicurses_formula_min   (void);                                       <*/
+/*> char        yvicurses_formula_small (void);                                       <*/
+/*> char        yvicurses_formula_label (void);                                       <*/
+/*> char        yvicurses_formula_max   (void);                                       <*/
 char        yvicurses_command       (void);
 char        yvicurses_float         (void);
 /*---(done)-----------------*/

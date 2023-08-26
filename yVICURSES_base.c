@@ -178,21 +178,6 @@ yVICURSES_init          (char *a_title, char *a_version, char a_mode)
       return rce;
    }
    yMODE_results ();
-   /*----(latest)------------------------*/
-   /*> yvikeys_mreg_init    ();                                                       <* 
-    *> yvikeys_sreg_init    ();                                                       <* 
-    *> yvikeys_sundo_init   ();                                                       <* 
-    *> yvikeys_mark_init    ();                                                       <* 
-    *> yvikeys_hint_init    ();                                                       <* 
-    *> yvikeys_visu_init    ();                                                       <* 
-    *> yvikeys_bufs_init    ();                                                       <* 
-    *> yvikeys_hist_init    ();                                                       <* 
-    *> yvikeys_loop_init    ();                                                       <* 
-    *> yvikeys_menu_final   ();                                                       <* 
-    *> yvikeys_dump_init    ();                                                       <* 
-    *> yvikeys_layer_init   ();                                                       <* 
-    *> yvikeys_sizes_init   ();                                                       <* 
-    *> yMODE_init_set   (UMOD_SENDKEYS, NULL, SENDKEYS_umode);                        <*/
    /*---(curses drawing)-----------------*/
    yVIEW_simple (YVIEW_TITLE  , 0, 0, yvicurses_title);
    yVIEW_simple (YVIEW_VERSION, 0, 0, yvicurses_version);
@@ -206,11 +191,6 @@ yVICURSES_init          (char *a_title, char *a_version, char a_mode)
    yVIEW_simple (YVIEW_NOTES  , 0, 0, yvicurses_notes);
    yVIEW_simple (YVIEW_HISTORY, 0, 0, yvicurses_history);
    yVIEW_menus  (yvicurses_menus);
-   myVICURSES.p_formula = 's';
-   yVIEW_switch_add (YVIEW_FORMULA, "min"  , "", yvicurses_formula_min  , "minimal formula display");
-   yVIEW_switch_add (YVIEW_FORMULA, "small", "", yvicurses_formula_small, "formula display with length");
-   yVIEW_switch_add (YVIEW_FORMULA, "label", "", yvicurses_formula_label, "formula display with label and length");
-   yVIEW_switch_add (YVIEW_FORMULA, "max"  , "", yvicurses_formula_max  , "detailed formula display");
    rc = yCMD_add (YVIHUB_M_FORMAT, "redraw"      , ""    , ""     , yVICURSES_redraw           , "force redraw" );
    /*---(complete)-----------------------*/
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
