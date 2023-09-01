@@ -139,6 +139,24 @@ yVICURSES__wave_two     (void)
    rc = yMARK_init_after     ();
    DEBUG_GRAF   yLOG_value   ("yMARK"   , rc);
    /*---(complete)-----------------------*/
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winreset"    , ""    , ""      , yX11_reset                 , "change the width of columns"               );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winreset"    , ""    , ""      , yX11_reset                 , "move between window manager desktops"      );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "desktop"     , ""    , "c"     , yX11_desk_goto             , "move between window manager desktops"      );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "term"        , ""    , "a"     , yX11_yvikeys_term          , "create a terminal session"                 );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winname"     , ""    , "a"     , yX11_yvikeys_name          , "name an existing window"                   );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "sendkeys"    , ""    , "a"     , yX11_yvikeys_sendkeys      , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "blitzkeys"   , ""    , "a"     , yX11_yvikeys_blitzkeys     , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winexact"    , ""    , "cciiii", yX11_yvikeys_winexact      , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winplace"    , ""    , "a"     , yX11_yvikeys_winplace      , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winbring"    , ""    , "c"     , yX11_yvikeys_winbring      , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "wingoto"     , ""    , "c"     , yX11_yvikeys_wingoto       , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winsend"     , ""    , "cc"    , yX11_yvikeys_winsend       , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "wintake"     , ""    , "cc"    , yX11_yvikeys_wintake       , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "mydesk"      , ""    , "c"     , yX11_yvikeys_mydesk        , "change position of current window"         );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "myhome"      , ""    , "ii"    , yX11_yvikeys_myhome        , "change position of current window"         );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "mysize"      , ""    , "ii"    , yX11_yvikeys_mysize        , "change size of current window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "mysizer"     , ""    , "iiii"  , yX11_yvikeys_mysizer       , "reset all desktops, windows, and shortcuts");
+   /*---(complete)-----------------------*/
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;
 }

@@ -36,8 +36,8 @@
 
 #define     P_VERMAJOR  "2.--, clean, improve, and expand"
 #define     P_VERMINOR  "2.0-, break out yVIKEYS into curses and opengl"
-#define     P_VERNUM    "2.0u"
-#define     P_VERTXT    "moved formula bar control to yVIEW (cleaner)"
+#define     P_VERNUM    "2.0v"
+#define     P_VERTXT    "improvement to formula bar, along with ySRC, yVIEW"
 
 #define     P_PRIORITY  "direct, simple, brief, vigorous, and lucid (h.w. fowler)"
 #define     P_PRINCIPAL "[grow a set] and build your wings on the way down (r. bradbury)"
@@ -55,17 +55,18 @@
 #include    <yLOG.h>              /* heatherly program logging                */
 #include    <ySTR.h>              /* heatherly string processing              */
 /*---(custom vikeys)---------------------*/
-#include    <yVIHUB.h>            /* heatherly vikeys key handling           */
-#include    <yKEYS.h>             /* heatherly vikeys key handling           */
-#include    <yMODE.h>             /* heatherly vikeys mode tracking          */
-#include    <yMACRO.h>            /* heatherly vikeys macro processing       */
-#include    <ySRC.h>              /* heatherly vikeys source editing         */
-#include    <yCMD.h>              /* heatherly vikeys command processing     */
-#include    <yVIEW.h>             /* heatherly vikeys view management        */
-#include    <yFILE.h>             /* heatherly vikeys content file handling  */
+#include    <yVIHUB.h>            /* heatherly vikeys key handling            */
+#include    <yKEYS.h>             /* heatherly vikeys key handling            */
+#include    <yMODE.h>             /* heatherly vikeys mode tracking           */
+#include    <yMACRO.h>            /* heatherly vikeys macro processing        */
+#include    <ySRC.h>              /* heatherly vikeys source editing          */
+#include    <yCMD.h>              /* heatherly vikeys command processing      */
+#include    <yVIEW.h>             /* heatherly vikeys view management         */
+#include    <yFILE.h>             /* heatherly vikeys content file handling   */
 #include    <yMARK.h>             /* heatherly vikeys search and marking      */
-#include    <yMAP.h>              /* heatherly vikeys location management    */
+#include    <yMAP.h>              /* heatherly vikeys location management     */
 /*---(custom other)----------------------*/
+#include    <yX11.h>              /* heatherly x-windows control              */
 #include    <yDLST_solo.h>        /* heatherly double-double-list             */
 /*---(posix standard)--------------------*/
 #include    <ncurses.h>           /* CURSES mvprintw, refresh, getch, ...     */

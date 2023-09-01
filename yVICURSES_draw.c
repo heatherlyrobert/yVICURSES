@@ -323,6 +323,7 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
    short       x_end       =    0;
    int         x_off       =    0;
    char        nn          [LEN_LABEL] = "";
+   char        cc          [LEN_LABEL] = "";
    /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    DEBUG_GRAF   yLOG_complex ("args"      , "%c part, %c loc, %c style", a_part, a_loc, a_style);
@@ -385,13 +386,23 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
             mvprintw (x_bott, x_left, " %-6.6s %s %-*.*s ", l, nn, a, a, t + b);
          }
          break;
-      case 'x' :
+      case 'f' :
          x_off = 13 + strlen (f);
          if (n == 0) {
             mvprintw (x_bott, x_left, " %-6.6s %s %-4.4s %c%-*.*s ", l, f, "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);
          } else {
             strlpadn (n, nn, '.', '>', 4);
             mvprintw (x_bott, x_left, " %-6.6s %s %s %-*.*s ", l, f, nn, a, a, t + b);
+         }
+         break;
+      case 'x' :
+         x_off = 17 + strlen (f);
+         if (n == 0) {
+            mvprintw (x_bott, x_left, " %-6.6s %s %-4.4s %-4.4s %c%-*.*s ", l, f, "····", "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);
+         } else {
+            strlpadn (n, nn, '.', '>', 4);
+            strlpadn (c, cc, '.', '>', 4);
+            mvprintw (x_bott, x_left, " %-6.6s %-4.4s %-4.4s %s %-*.*s ", l, f, cc, nn, a, a, t + b);
          }
          break;
       }
