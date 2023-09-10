@@ -238,7 +238,7 @@ yVICURSES_at_loc        (short x, short y)
    }
    ystrlcpy (t, yvicurses__by_pair (x_col), LEN_HUND);
    sprintf (g_print, "%3dx %3dy   %8d   %c %3d   %8d %c %c %c   %8d %s",
-         x, y, x_loc, chrvisible (x_ch), x_ch,
+         x, y, x_loc, ychrvisible (x_ch), x_ch,
          x_attr, b, B, u, x_col, t);
    return g_print;
 }
