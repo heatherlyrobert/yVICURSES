@@ -178,8 +178,8 @@ yVICURSES_color         (char *a_terse, char *a_desc, char a_fg, char a_bg)
    x_bg = yvicurses__primary  (a_bg);
    if (x_bg < -1)   x_bg  = yvicurses__primary  ('-');
    /*---(save)---------------------------*/
-   strlcpy (g_colors [n].terse, a_terse, LEN_LABEL);
-   if (a_desc != NULL)  strlcpy (g_colors [n].desc, a_desc, LEN_DESC);
+   ystrlcpy (g_colors [n].terse, a_terse, LEN_LABEL);
+   if (a_desc != NULL)  ystrlcpy (g_colors [n].desc, a_desc, LEN_DESC);
    g_colors [n].fg    = a_fg;
    g_colors [n].bg    = a_bg;
    DEBUG_GRAF  yLOG_value   ("fg"        , g_colors [n].fg);
@@ -236,7 +236,7 @@ yVICURSES_at_loc        (short x, short y)
    case  A_BLINK | A_UNDERLINE  :  b = '-';  u = 'y';  B = 'y';     break;
    case  A_BLINK | A_BOLD       :  b = 'y';  u = '-';  B = 'y';     break;
    }
-   strlcpy (t, yvicurses__by_pair (x_col), LEN_HUND);
+   ystrlcpy (t, yvicurses__by_pair (x_col), LEN_HUND);
    sprintf (g_print, "%3dx %3dy   %8d   %c %3d   %8d %c %c %c   %8d %s",
          x, y, x_loc, chrvisible (x_ch), x_ch,
          x_attr, b, B, u, x_col, t);
@@ -256,9 +256,9 @@ yVICURSES_at_str        (short x, short y, short a_wide, short a_tall)
          x_loc  = mvwinch (stdscr, y + iy, x + ix);
          x_ch   = x_loc & A_CHARTEXT;
          sprintf (t, "%c", x_ch);
-         strlcat (g_print, t, LEN_FULL);
+         ystrlcat (g_print, t, LEN_FULL);
       }
-      if (iy < a_tall - 1)  strlcat (g_print, "¨", LEN_FULL);
+      if (iy < a_tall - 1)  ystrlcat (g_print, "¨", LEN_FULL);
    }
    return g_print;
 }

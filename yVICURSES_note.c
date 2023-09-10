@@ -109,7 +109,7 @@ yvicurses_notes_draw    (short x, short y, uchar w, uchar h, uchar *t)
       mvprintw   (i, x, "%*.*s", w, w, YSTR_EMPTY);
    }
    /*---(opengl)-------------------------*/
-   strlcpy (t, t, LEN_RECD);
+   ystrlcpy (t, t, LEN_RECD);
    x_edge = 1;
    x_beg  = x_next  = 0;
    x_full = strlen (t);

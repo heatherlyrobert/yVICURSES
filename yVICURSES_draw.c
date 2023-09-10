@@ -219,9 +219,9 @@ yvicurses_univs         (void)
    DEBUG_GRAF   yLOG_value   ("x_sys"     , x_sys);
    if (x_disp == x_extra) {
       yVICURSES_by_name ("u_back");
-      strlpadn (x_usr, t, '.', '>', 2);
+      ystrlpadn (x_usr, t, '.', '>', 2);
       mvprintw (x_bott, x_left + 4, "%s", t);
-      strlpadn (x_sys, t, '.', '>', 1);
+      ystrlpadn (x_sys, t, '.', '>', 1);
       mvprintw (x_bott, x_left + 8, "%s", t);
 
    }
@@ -342,7 +342,7 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
    ySRC_contents (a_part, &m, l, &n, &a, &b, &c, &e, f, t);
    DEBUG_GRAF   yLOG_complex  ("pos"       , "%3dn, %3da, %3db, %3dc, %3de", n, a, b, c, e);
    DEBUG_GRAF   yLOG_complex  ("content"   , "%c å%sæ", m, t);
-   /*> strlcpy (l, "JESUS", LEN_LABEL);                                               <*/
+   /*> ystrlcpy (l, "JESUS", LEN_LABEL);                                               <*/
    DEBUG_GRAF   yLOG_info     ("label"     , l);
    DEBUG_GRAF   yLOG_info     ("format"    , f);
    /*---(draw)---------------------------*/
@@ -356,7 +356,7 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
    /*---(content)------------------------*/
    if (a_part == YVIEW_COMMAND) {
       x_off = 4;
-      strlpadn (n, nn, '.', '>', 4);
+      ystrlpadn (n, nn, '.', '>', 4);
       mvprintw (x_bott, x_left, "%s %-*.*s ", nn, a, a, t + b);
    } else {
       switch (a_style) {
@@ -373,7 +373,7 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
          if (n == 0) {
             mvprintw (x_bott, x_left, "%-4.4s %c%-*.*s ", "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);
          } else {
-            strlpadn (n, nn, '.', '>', 4);
+            ystrlpadn (n, nn, '.', '>', 4);
             mvprintw (x_bott, x_left, "%s %-*.*s ", nn, a, a, t + b);
          }
          break;
@@ -382,7 +382,7 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
          if (n == 0) {
             mvprintw (x_bott, x_left, " %-6.6s %-4.4s %c%-*.*s ", l, "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);
          } else {
-            strlpadn (n, nn, '.', '>', 4);
+            ystrlpadn (n, nn, '.', '>', 4);
             mvprintw (x_bott, x_left, " %-6.6s %s %-*.*s ", l, nn, a, a, t + b);
          }
          break;
@@ -391,7 +391,7 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
          if (n == 0) {
             mvprintw (x_bott, x_left, " %-6.6s %s %-4.4s %c%-*.*s ", l, f, "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);
          } else {
-            strlpadn (n, nn, '.', '>', 4);
+            ystrlpadn (n, nn, '.', '>', 4);
             mvprintw (x_bott, x_left, " %-6.6s %s %s %-*.*s ", l, f, nn, a, a, t + b);
          }
          break;
@@ -400,8 +400,8 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
          if (n == 0) {
             mvprintw (x_bott, x_left, " %-6.6s %s %-4.4s %-4.4s %c%-*.*s ", l, f, "····", "····", G_CHAR_NULL, a - 1, a - 1, YSTR_EMPTY);
          } else {
-            strlpadn (n, nn, '.', '>', 4);
-            strlpadn (c, cc, '.', '>', 4);
+            ystrlpadn (n, nn, '.', '>', 4);
+            ystrlpadn (c, cc, '.', '>', 4);
             mvprintw (x_bott, x_left, " %-6.6s %-4.4s %-4.4s %s %-*.*s ", l, f, cc, nn, a, a, t + b);
          }
          break;
