@@ -171,6 +171,7 @@ yVICURSES_init          (char *a_title, char *a_version, char a_mode)
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
    /*---(setup ncurses)---------------*/
    initscr  ();     /* fire up ncurses with a default screen (stdscr)         */
+   keypad   (stdscr, TRUE);
    raw      ();     /* read key-by-key rather than waiting for \n (raw mode)  */
    noecho   ();     /* don't automatically echo keypresses to the screen      */
    ESCDELAY = 0;    /* so escape responds immediately                         */

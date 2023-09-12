@@ -36,6 +36,8 @@ yvicurses_resize        (void)
 /*====================------------------------------------====================*/
 static void      o___INPUT___________________o (void) {;}
 
+#define  ctrl(x)   ((x) & 0x1f)
+
 char
 yvicurses_getch         (char a_block, char *a_ch)
 {
@@ -72,16 +74,47 @@ yvicurses_getch         (char a_block, char *a_ch)
    /*---(handle input)-------------------*/
    x_ch = getch ();
    DEBUG_LOOP   yLOG_sint    (x_ch);
-   /*---(special operations)-------------*/
-   /*> if (x_ch == KEY_RESIZE || x_ch == -102) {                                      <* 
-    *>    DEBUG_LOOP   yLOG_snote   ("resize request");                               <* 
-    *>    yvicurses_resize ();                                                        <* 
-    *>    DEBUG_LOOP   yLOG_sexit   (__FUNCTION__);                                   <* 
-    *>    return 1;                                                                   <* 
-    *> }                                                                              <*/
-   /*---(save back)----------------------*/
+   /*---(fix keypad keys)----------------*/
+   switch (x_ch) {
+   case KEY_BACKSPACE :
+      DEBUG_LOOP   yLOG_snote   ("backspace (263)");
+      x_ch = 8;
+      break;
+   case KEY_DC        :
+      DEBUG_LOOP   yLOG_snote   ("delete (330)");
+      x_ch = 127;
+      break;
+   case KEY_DOWN      :
+      DEBUG_LOOP   yLOG_snote   ("up arrow (258)");
+      x_ch = 'j';
+      break;
+   case KEY_UP        :
+      DEBUG_LOOP   yLOG_snote   ("down arrow (259)");
+      x_ch = 'k';
+      break;
+   case KEY_LEFT      :
+      DEBUG_LOOP   yLOG_snote   ("left arrow (260)");
+      x_ch = 'h';
+      break;
+   case KEY_RIGHT     :
+      DEBUG_LOOP   yLOG_snote   ("right arrow (261)");
+      x_ch = 'l';
+      break;
+   }
+   /*---(truncate value limits)----------*/
    if (x_ch >= 0 && x_ch <= 255)  x_key = x_ch;
    else                           x_key = 0;
+   DEBUG_LOOP   yLOG_sint    (x_key);
+   /*---(handle control keys)------------*/
+   switch (x_key) { /* VERTICAL */
+   /* C-t */  case  20 :  x_key =  14;   break;
+   /* C-b */  case   2 :  x_key =  15;   break;
+   /* C-s */  case  19 :  x_key =  16;   break;
+   /* C-e */  case   5 :  x_key =  17;   break;
+   /* C-f */  case   6 :  x_key =  18;   break;
+   /* C-n */  case  14 :  x_key =  19;   break;
+   }
+   /*---(save back)----------------------*/
    DEBUG_LOOP   yLOG_sint    (x_key);
    *a_ch = x_key;
    /*---(complete)-----------------------*/
@@ -89,6 +122,7 @@ yvicurses_getch         (char a_block, char *a_ch)
    return 0;
 }
 
+/*> abcdefghijklmnopqrstuvwxyz                                                        <*/
 
 
 /*====================------------------------------------====================*/
