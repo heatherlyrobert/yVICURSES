@@ -148,6 +148,8 @@ yVICURSES__wave_two     (void)
    rc = yCMD_add (YVIHUB_M_FORMAT, "blitzkeys"   , ""    , "a"     , yX11_yvikeys_blitzkeys     , "sendkeys to a specific window"             );
    rc = yCMD_add (YVIHUB_M_FORMAT, "winexact"    , ""    , "cciiii", yX11_yvikeys_winexact      , "sendkeys to a specific window"             );
    rc = yCMD_add (YVIHUB_M_FORMAT, "winplace"    , ""    , "a"     , yX11_yvikeys_winplace      , "sendkeys to a specific window"             );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winpush"     , ""    , "iiii"  , yX11_win_push              , "move a window temporarily and remember"    );
+   rc = yCMD_add (YVIHUB_M_FORMAT, "winpop"      , ""    , ""      , yX11_win_pop               , "put remembered (pushed) win back"          );
    rc = yCMD_add (YVIHUB_M_FORMAT, "winbring"    , ""    , "c"     , yX11_yvikeys_winbring      , "sendkeys to a specific window"             );
    rc = yCMD_add (YVIHUB_M_FORMAT, "wingoto"     , ""    , "c"     , yX11_yvikeys_wingoto       , "sendkeys to a specific window"             );
    rc = yCMD_add (YVIHUB_M_FORMAT, "winsend"     , ""    , "cc"    , yX11_yvikeys_winsend       , "sendkeys to a specific window"             );
@@ -156,6 +158,9 @@ yVICURSES__wave_two     (void)
    rc = yCMD_add (YVIHUB_M_FORMAT, "myhome"      , ""    , "ii"    , yX11_yvikeys_myhome        , "change position of current window"         );
    rc = yCMD_add (YVIHUB_M_FORMAT, "mysize"      , ""    , "ii"    , yX11_yvikeys_mysize        , "change size of current window"             );
    rc = yCMD_add (YVIHUB_M_FORMAT, "mysizer"     , ""    , "iiii"  , yX11_yvikeys_mysizer       , "reset all desktops, windows, and shortcuts");
+   /*---(extra)--------------------------*/
+   rc = yMACRO_graphic_config (yVICURSES_draw_now, yVICURSES_screen_print);
+   DEBUG_GRAF   yLOG_value   ("graphics", rc);
    /*---(complete)-----------------------*/
    DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
    return 0;

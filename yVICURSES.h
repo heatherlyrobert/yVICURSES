@@ -24,5 +24,8 @@ char        yVICURSES_by_name       (char *a_terse);
 char*       yVICURSES_at_loc        (short x, short y);
 char*       yVICURSES_at_str        (short x, short y, short a_wide, short a_tall);
 
+char        yVICURSES_draw_now      (void);
+char        yVICURSES_screen_print  (char *a_name);
+
 #endif
 /*============================----end-of-source---============================*/

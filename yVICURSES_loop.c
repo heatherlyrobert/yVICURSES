@@ -171,3 +171,5 @@ yvicurses_refresh       (void)
    return 0;
 }
 
+char yVICURSES_draw_now      (void) { return yVIEW_draw (); }
+

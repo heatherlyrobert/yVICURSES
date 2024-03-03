@@ -263,6 +263,15 @@ yVICURSES_at_str        (short x, short y, short a_wide, short a_tall)
    return g_print;
 }
 
+char
+yVICURSES_screen_print  (char *a_name)
+{
+   char        rce         =  -10;
+   --rce;  if (a_name == NULL)  return rce;
+   scr_dump (a_name);
+   return 0;
+}
+
 
 
 /*====================------------------------------------====================*/
