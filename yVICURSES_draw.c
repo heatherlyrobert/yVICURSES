@@ -348,7 +348,7 @@ yvicurses__display         (char a_part, char a_loc, char a_style)
    /*---(draw)---------------------------*/
    if (a_part == YVIEW_COMMAND && x_edit != 'y') {
       x_len = strlen (yMODE_message ());
-      if (x_len < x_wide)  mvprintw (x_bott, x_left, "%-*.*s" , x_wide - 1, x_wide - 1, yMODE_message ());
+      if (x_len < x_wide)  mvprintw (x_bott, x_left, "%-*.*s" , x_wide    , x_wide    , yMODE_message ());
       else                 mvprintw (x_bott, x_left, "%-*.*s¬", x_wide - 1, x_wide - 1, yMODE_message ());
       DEBUG_GRAF   yLOG_exit    (__FUNCTION__);
       return 0;

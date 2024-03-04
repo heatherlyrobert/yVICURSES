@@ -17,10 +17,13 @@ yvicurses_resize        (void)
    int         x_tall     =    0;
    /*---(header)-------------------------*/
    DEBUG_GRAF   yLOG_enter   (__FUNCTION__);
+   DEBUG_GRAF   yLOG_value   ("wide"      , myVICURSES.wide);
+   DEBUG_GRAF   yLOG_value   ("tall"      , myVICURSES.tall);
    getmaxyx (stdscr, x_tall, x_wide);
    DEBUG_GRAF   yLOG_value   ("x_wide"    , x_wide);
    DEBUG_GRAF   yLOG_value   ("x_tall"    , x_tall);
    if (myVICURSES.wide != x_wide || myVICURSES.tall != x_tall) {
+      DEBUG_GRAF   yLOG_note    ("must update");
       yVIEW_resize (x_wide, x_tall, 0);
       myVICURSES.wide = x_wide;
       myVICURSES.tall = x_tall;
